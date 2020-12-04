@@ -11,30 +11,43 @@ public class BoardState {
     //Starting Position
     public BoardState(){
         for(int p=0; p<8; p++){
-            theBoard[1][p]= new Pawn(false, new char[]{(char)(97+p),8}, 'P');
-            theBoard[6][p]= new Pawn(true, new char[]{(char)(97+p),1}, 'p');
+            theBoard[1][p]= new Pawn(false, new int[]{1,p}, 'P');
+            theBoard[6][p]= new Pawn(true, new int[]{6,p}, 'p');
         }
 
-        theBoard[0][0]= new Rook(false, new char[]{'a',8}, 'R');
-        theBoard[0][7]= new Rook(false, new char[]{'h',8}, 'R');
-        theBoard[7][0]= new Rook(true, new char[]{'a',1}, 'r');
-        theBoard[7][7]= new Rook(true, new char[]{'h',1}, 'r');
+        theBoard[0][0]= new Rook(false, new int[]{0,0}, 'R');
+        theBoard[0][7]= new Rook(false, new int[]{0,7}, 'R');
+        theBoard[7][0]= new Rook(true, new int[]{7,0}, 'r');
+        theBoard[7][7]= new Rook(true, new int[]{7,7}, 'r');
 
-        theBoard[0][1]= new Knight(false, new char[]{'b',8}, 'N');
-        theBoard[0][6]= new Knight(false, new char[]{'g',8}, 'N');
-        theBoard[7][1]= new Knight(true, new char[]{'b',1}, 'n');
-        theBoard[7][6]= new Knight(true, new char[]{'g',1}, 'n');
+        theBoard[0][1]= new Knight(false, new int[]{0,1}, 'N');
+        theBoard[0][6]= new Knight(false, new int[]{0,6}, 'N');
+        theBoard[7][1]= new Knight(true, new int[]{7,1}, 'n');
+        theBoard[7][6]= new Knight(true, new int[]{7,6}, 'n');
 
-        theBoard[0][2]= new Bishop(false, new char[]{'c',8}, 'B');
-        theBoard[0][5]= new Bishop(false, new char[]{'f',8}, 'B');
-        theBoard[7][2]= new Bishop(true, new char[]{'c',1}, 'b');
-        theBoard[7][5]= new Bishop(true, new char[]{'f',1}, 'b');
+        theBoard[0][2]= new Bishop(false, new int[]{0,2}, 'B');
+        theBoard[0][5]= new Bishop(false, new int[]{0,5}, 'B');
+        theBoard[7][2]= new Bishop(true, new int[]{7,2}, 'b');
+        theBoard[7][5]= new Bishop(true, new int[]{7,5}, 'b');
 
-        theBoard[0][3]= new Queen(false, new char[]{'d',8}, 'Q');
-        theBoard[7][3]= new Queen(true, new char[]{'d',1}, 'q');
+        theBoard[0][3]= new Queen(false, new int[]{0,3}, 'Q');
+        theBoard[7][3]= new Queen(true, new int[]{7,3}, 'q');
 
-        theBoard[0][4]= new King(false, new char[]{'e',8}, 'K');
-        theBoard[7][4]= new King(true, new char[]{'e',1}, 'k');
+        theBoard[0][4]= new King(false, new int[]{0,4}, 'K');
+        theBoard[7][4]= new King(true, new int[]{0,4}, 'k');
+    }
+
+    public void makeMove(int[] startPos, int[] endPos){
+        if(theBoard[startPos[0]][startPos[1]].checkMove(this,startPos,endPos)){
+            theBoard[startPos[0]][startPos[1]].position[0]=endPos[0];
+            theBoard[startPos[0]][startPos[1]].position[1]=endPos[1];
+
+            theBoard[endPos[0]][endPos[1]]=theBoard[startPos[0]][startPos[1]];
+            theBoard[startPos[0]][startPos[1]]=null;
+
+            theBoard[endPos[0]][endPos[1]].hasMoved=true;
+        }
+
     }
 
     public void printBoard(){
@@ -45,6 +58,7 @@ public class BoardState {
             }
             System.out.println();
         }
+        System.out.println();
     }
 
 }

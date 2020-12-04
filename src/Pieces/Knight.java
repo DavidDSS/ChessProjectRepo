@@ -4,12 +4,12 @@ import Board.BoardState;
 
 public class Knight extends Piece {
 
-    public Knight(boolean color, char[] pos, char letter){
+    public Knight(boolean color, int[] pos, char letter){
         super(color, pos, letter);
     }
 
     @Override
-    public boolean checkMove(BoardState board, char[] startPos, char[] endPos) {
+    public boolean checkMove(BoardState board, int[] startPos, int[] endPos) {
         return false;
     }
 }
