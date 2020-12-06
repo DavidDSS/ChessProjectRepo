@@ -16,30 +16,30 @@ public class BoardState {
     //Starting Position
     public BoardState(){
         for(int p=0; p<8; p++){
-            theBoard[1][p]= new Pawn(false, new int[]{1,p}, 'P');
-            theBoard[6][p]= new Pawn(true, new int[]{6,p}, 'p');
+            theBoard[1][p]= new Pawn(false, 1, p, 'P');
+            theBoard[6][p]= new Pawn(true, 6, p, 'p');
         }
 
-        theBoard[0][0]= new Rook(false, new int[]{0,0}, 'R');
-        theBoard[0][7]= new Rook(false, new int[]{0,7}, 'R');
-        theBoard[7][0]= new Rook(true, new int[]{7,0}, 'r');
-        theBoard[7][7]= new Rook(true, new int[]{7,7}, 'r');
+        theBoard[0][0]= new Rook(false, 0,0, 'R');
+        theBoard[0][7]= new Rook(false, 0,7, 'R');
+        theBoard[7][0]= new Rook(true, 7,0, 'r');
+        theBoard[7][7]= new Rook(true, 7,7, 'r');
 
-        theBoard[0][1]= new Knight(false, new int[]{0,1}, 'N');
-        theBoard[0][6]= new Knight(false, new int[]{0,6}, 'N');
-        theBoard[7][1]= new Knight(true, new int[]{7,1}, 'n');
-        theBoard[7][6]= new Knight(true, new int[]{7,6}, 'n');
+        theBoard[0][1]= new Knight(false, 0,1, 'N');
+        theBoard[0][6]= new Knight(false, 0,6, 'N');
+        theBoard[7][1]= new Knight(true, 7,1, 'n');
+        theBoard[7][6]= new Knight(true, 7,6, 'n');
 
-        theBoard[0][2]= new Bishop(false, new int[]{0,2}, 'B');
-        theBoard[0][5]= new Bishop(false, new int[]{0,5}, 'B');
-        theBoard[7][2]= new Bishop(true, new int[]{7,2}, 'b');
-        theBoard[7][5]= new Bishop(true, new int[]{7,5}, 'b');
+        theBoard[0][2]= new Bishop(false, 0,2, 'B');
+        theBoard[0][5]= new Bishop(false, 0,5, 'B');
+        theBoard[7][2]= new Bishop(true, 7,2, 'b');
+        theBoard[7][5]= new Bishop(true, 7,5, 'b');
 
-        theBoard[0][3]= new Queen(false, new int[]{0,3}, 'Q');
-        theBoard[7][3]= new Queen(true, new int[]{7,3}, 'q');
+        theBoard[0][3]= new Queen(false, 0,3, 'Q');
+        theBoard[7][3]= new Queen(true, 7,3, 'q');
 
-        theBoard[0][4]= new King(false, new int[]{0,4}, 'K');
-        theBoard[7][4]= new King(true, new int[]{0,4}, 'k');
+        theBoard[0][4]= new King(false, 0,4, 'K');
+        theBoard[7][4]= new King(true, 0,4, 'k');
     }
 
     public void makeMove(int[] startPos, int[] endPos){
@@ -49,7 +49,7 @@ public class BoardState {
 
         // check to see if the move made is possible
         for(Piece p : moves){
-            if(p.position[0]==endPos[0] && p.position[1]==endPos[1]){
+            if(p.row==endPos[0] && p.col==endPos[1]){
                 thePiece=p;
             }
         }

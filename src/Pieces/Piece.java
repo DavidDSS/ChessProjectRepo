@@ -9,15 +9,17 @@ public abstract class Piece {
     //0 is black and 1 is white
     public boolean white=true;
     public boolean captured=false;
-    public int[] position= new int[2];
+    //public int[] position= new int[2];
+    public int row;
+    public int col;
     public char pieceLetter;
     public boolean hasMoved=false;
     ArrayList<Piece> moves;
 
-    public Piece(boolean color, int[] pos, char letter){
+    public Piece(boolean color, int r, int c, char letter){
         this.setColor(color);
-        this.position[0]=pos[0];
-        this.position[1]=pos[1];
+        this.row= r;
+        this.col= c;
         this.pieceLetter=letter;
     }
 

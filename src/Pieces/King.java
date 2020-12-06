@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class King extends Piece {
 
-    public King(boolean color, int[] pos, char letter){
-        super(color, pos, letter);
+    public King(boolean color, int r, int c, char letter){
+        super(color, r, c, letter);
         moves= new ArrayList<>();
     }
 

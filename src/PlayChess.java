@@ -36,6 +36,14 @@ public class PlayChess {
     public static void main(String[] args){
         BoardState board= new BoardState();
         board.printBoard();
-        
+
+        board.makeMove(new int[]{6,3},new int[]{5,3});
+        board.makeMove(new int[]{1,2},new int[]{2,2});
+        board.makeMove(new int[]{7,2},new int[]{6,3});
+        board.makeMove(new int[]{2,2},new int[]{3,2});
+        board.makeMove(new int[]{6,3},new int[]{2,7});
+        board.makeMove(new int[]{1,0},new int[]{2,0});
+        board.makeMove(new int[]{2,7},new int[]{1,6});
+
     }
 }

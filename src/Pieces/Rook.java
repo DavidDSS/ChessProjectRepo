@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Rook extends Piece{
 
-    public Rook(boolean color, int[] pos, char letter){
-        super(color, pos, letter);
+    public Rook(boolean color, int r, int c, char letter){
+        super(color, r, c, letter);
         moves= new ArrayList<>();
     }
 
@@ -15,8 +15,8 @@ public class Rook extends Piece{
     public ArrayList<Piece> getMoves(BoardState board) {
         moves.clear();
 
-        int pr=this.position[0];
-        int pc=this.position[1];
+        int pr=this.row;
+        int pc=this.col;
 
         //Check Down Moves
         for(int i=1; i<8;i++){
@@ -24,7 +24,7 @@ public class Rook extends Piece{
             if(!inBounds(pr+i,pc)) break;
             //If no piece add move
             if (board.theBoard[pr + i][pc] == null) {
-                moves.add(new Rook(this.white, new int[]{pr + i, pc}, this.pieceLetter));
+                moves.add(new Rook(this.white, pr + i, pc, this.pieceLetter));
             }
             //If piece encounter add move if opposite color
             if (board.theBoard[pr + i][pc] != null) {
@@ -35,7 +35,7 @@ public class Rook extends Piece{
                         break;
                     }
                     else {
-                        moves.add(new Rook(this.white, new int[]{pr + i, pc}, this.pieceLetter));
+                        moves.add(new Rook(this.white, pr + i, pc, this.pieceLetter));
                         break;
                     }
                 }
@@ -46,7 +46,7 @@ public class Rook extends Piece{
                         break;
                     }
                     else {
-                        moves.add(new Rook(this.white, new int[]{pr + i, pc}, this.pieceLetter));
+                        moves.add(new Rook(this.white, pr + i, pc, this.pieceLetter));
                         break;
                     }
                 }
@@ -59,7 +59,7 @@ public class Rook extends Piece{
             if(!inBounds(pr-i,pc)) break;
             //If no piece add move
             if (board.theBoard[pr - i][pc] == null) {
-                moves.add(new Rook(this.white, new int[]{pr - i, pc}, this.pieceLetter));
+                moves.add(new Rook(this.white, pr - i, pc, this.pieceLetter));
             }
             //If piece encounter add move if opposite color
             if (board.theBoard[pr - i][pc] != null) {
@@ -70,7 +70,7 @@ public class Rook extends Piece{
                         break;
                     }
                     else {
-                        moves.add(new Rook(this.white, new int[]{pr - i, pc}, this.pieceLetter));
+                        moves.add(new Rook(this.white, pr - i, pc, this.pieceLetter));
                         break;
                     }
                 }
@@ -81,7 +81,7 @@ public class Rook extends Piece{
                         break;
                     }
                     else {
-                        moves.add(new Rook(this.white, new int[]{pr - i, pc}, this.pieceLetter));
+                        moves.add(new Rook(this.white, pr - i, pc, this.pieceLetter));
                         break;
                     }
                 }
@@ -94,7 +94,7 @@ public class Rook extends Piece{
             if(!inBounds(pr,pc-i)) break;
             //If no piece add move
             if (board.theBoard[pr][pc - i] == null) {
-                moves.add(new Rook(this.white, new int[]{pr, pc- i}, this.pieceLetter));
+                moves.add(new Rook(this.white, pr, pc- i, this.pieceLetter));
             }
             //If piece encounter add move if opposite color
             if (board.theBoard[pr][pc - i] != null) {
@@ -105,7 +105,7 @@ public class Rook extends Piece{
                         break;
                     }
                     else {
-                        moves.add(new Rook(this.white, new int[]{pr, pc - i}, this.pieceLetter));
+                        moves.add(new Rook(this.white, pr, pc - i, this.pieceLetter));
                         break;
                     }
                 }
@@ -116,7 +116,7 @@ public class Rook extends Piece{
                         break;
                     }
                     else {
-                        moves.add(new Rook(this.white, new int[]{pr, pc - i}, this.pieceLetter));
+                        moves.add(new Rook(this.white, pr, pc - i, this.pieceLetter));
                         break;
                     }
                 }
@@ -129,7 +129,7 @@ public class Rook extends Piece{
             if(!inBounds(pr,pc+i)) break;
             //If no piece add move
             if (board.theBoard[pr][pc+ i] == null) {
-                moves.add(new Rook(this.white, new int[]{pr, pc+ i}, this.pieceLetter));
+                moves.add(new Rook(this.white, pr, pc+ i, this.pieceLetter));
             }
             //If piece encounter add move if opposite color
             if (board.theBoard[pr][pc+ i] != null) {
@@ -140,7 +140,7 @@ public class Rook extends Piece{
                         break;
                     }
                     else {
-                        moves.add(new Rook(this.white, new int[]{pr, pc + i}, this.pieceLetter));
+                        moves.add(new Rook(this.white, pr, pc + i, this.pieceLetter));
                         break;
                     }
                 }
@@ -151,7 +151,7 @@ public class Rook extends Piece{
                         break;
                     }
                     else {
-                        moves.add(new Rook(this.white, new int[]{pr, pc + i}, this.pieceLetter));
+                        moves.add(new Rook(this.white, pr, pc + i, this.pieceLetter));
                         break;
                     }
                 }
