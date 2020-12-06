@@ -39,10 +39,15 @@ public class BoardState {
         theBoard[7][3]= new Queen(true, 7,3, 'q');
 
         theBoard[0][4]= new King(false, 0,4, 'K');
-        theBoard[7][4]= new King(true, 0,4, 'k');
+        theBoard[7][4]= new King(true, 7,4, 'k');
     }
 
     public void makeMove(int[] startPos, int[] endPos){
+
+        // check if empty space selected for start pos
+        if (theBoard[startPos[0]][startPos[1]]== null) {
+            return;
+        }
         //If white to move and black piece chosen return
         if(this.whiteToMove && !this.theBoard[startPos[0]][startPos[1]].white) {
             return;
@@ -64,6 +69,44 @@ public class BoardState {
         }
 
         if(thePiece!=null){
+
+            // check for castling move
+            if (thePiece.pieceLetter=='k' || thePiece.pieceLetter=='K') {
+                // king side castles
+                if ((endPos[1]-startPos[1])==2) {
+                    // we account for the king moving later
+                    if (whiteToMove) {
+                        // only move the rook
+                        theBoard[7][5] = new Rook(true, 7, 5, 'r');
+                        theBoard[7][5].hasMoved = true;
+                        theBoard[7][7] = null;
+                    }
+                    else {
+                        // only move the rook
+                        theBoard[0][5] = new Rook(true, 0, 5, 'R');
+                        theBoard[0][5].hasMoved = true;
+                        theBoard[0][7] = null;
+                    }
+                }
+
+                // queen side castles
+                if ((endPos[1]-startPos[1])==-2) {
+                    // we account for the king moving later
+                    if (whiteToMove) {
+                        // only move the rook
+                        theBoard[7][3] = new Rook(true, 7, 3, 'r');
+                        theBoard[7][3].hasMoved = true;
+                        theBoard[7][0] = null;
+                    }
+                    else {
+                        // only move the rook
+                        theBoard[0][3] = new Rook(true, 0, 3, 'R');
+                        theBoard[0][3].hasMoved = true;
+                        theBoard[0][0] = null;
+                    }
+                }
+            } // castling check
+
             // check for enpassant attack
             if(thePiece.pieceLetter=='p' || thePiece.pieceLetter=='P'){
                 // check if move is left or right
@@ -79,7 +122,8 @@ public class BoardState {
                         }
                     }
                 }
-            }
+            } // en passant check
+
             // set en passant flag to false
             this.enPassant=false;
 
