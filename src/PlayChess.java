@@ -38,10 +38,15 @@ public class PlayChess {
         board.printBoard();
 
         board.makeMove(new int[]{6,3},new int[]{4,3});
-        board.makeMove(new int[]{1,1},new int[]{2,1});
-        board.makeMove(new int[]{4,3},new int[]{3,3});
         board.makeMove(new int[]{1,2},new int[]{3,2});
+        board.makeMove(new int[]{4,3},new int[]{3,2});
+        board.makeMove(new int[]{1,3},new int[]{3,3});
+        board.makeMove(new int[]{3,2},new int[]{2,3});
+        board.makeMove(new int[]{1,4},new int[]{2,3});
+
+        /*board.makeMove(new int[]{1,2},new int[]{3,2});
         board.makeMove(new int[]{3,3},new int[]{2,2});
+        board.makeMove(new int[]{1,3},new int[]{2,2});*/
 
 
         /*for(Piece p : pawnMoves){

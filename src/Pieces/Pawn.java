@@ -49,7 +49,7 @@ public class Pawn extends Piece {
             }
             //Diagonal Right
             if(inBounds(pr-1,pc+1)) {
-                if (board.theBoard[pr - 1][pc + 1] != null && !board.theBoard[pr - 1][pc - 1].white || board.enPassant) {
+                if (board.theBoard[pr - 1][pc + 1] != null && !board.theBoard[pr - 1][pc + 1].white || board.enPassant) {
                     moves.add(new Pawn(this.white, new int[]{pr - 1, pc + 1}, this.pieceLetter));
                 }
             }
@@ -58,13 +58,13 @@ public class Pawn extends Piece {
         else{
             //Diagonal Left
             if(inBounds(pr+1,pc-1)) {
-                if (board.theBoard[pr + 1][pc - 1] != null && board.theBoard[pr - 1][pc - 1].white || board.enPassant) {
+                if (board.theBoard[pr + 1][pc - 1] != null && board.theBoard[pr + 1][pc - 1].white || board.enPassant) {
                     moves.add(new Pawn(this.white, new int[]{pr + 1, pc - 1}, this.pieceLetter));
                 }
             }
             //Diagonal Right
             if(inBounds(pr+1,pc+1)){
-                if(board.theBoard[pr+1][pc+1]!=null && board.theBoard[pr - 1][pc - 1].white || board.enPassant){
+                if(board.theBoard[pr+1][pc+1]!=null && board.theBoard[pr + 1][pc + 1].white || board.enPassant){
                     moves.add(new Pawn(this.white, new int[]{pr+1,pc+1},this.pieceLetter));
                 }
             }

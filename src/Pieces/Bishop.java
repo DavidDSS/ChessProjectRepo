@@ -13,6 +13,15 @@ public class Bishop extends Piece {
 
     @Override
     public ArrayList<Piece> getMoves(BoardState board) {
-        return null;
+        moves.clear();
+        //White
+        if(board.whiteToMove) {
+
+        }
+        //Black
+        else{
+
+        }
+        return moves;
     }
 }

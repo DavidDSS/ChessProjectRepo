@@ -9,6 +9,7 @@ public class BoardState {
     public Piece[][] theBoard = new Piece[8][8];
     public boolean whiteToMove=true;
     public boolean enPassant=false;
+    public int enPassantCol;
     ArrayList<Piece> capturedPiecesWhite = new ArrayList<>();
     ArrayList<Piece> capturedPiecesBlack = new ArrayList<>();
 
@@ -54,6 +55,23 @@ public class BoardState {
         }
 
         if(thePiece!=null){
+
+            // check for enpassant attack
+            if(thePiece.pieceLetter=='p' || thePiece.pieceLetter=='P'){
+                // check if move is left or right
+                if(Math.abs(endPos[1]-startPos[1])==1){
+                    if(enPassantCol==endPos[1]){
+                        if(this.whiteToMove){
+                            capturedPiecesBlack.add(theBoard[endPos[0]+1][endPos[1]]);
+                            theBoard[endPos[0]+1][endPos[1]]=null;
+                        }
+                        else{
+                            capturedPiecesWhite.add(theBoard[endPos[0]-1][endPos[1]]);
+                            theBoard[endPos[0]-1][endPos[1]]=null;
+                        }
+                    }
+                }
+            }
             // set en passant flag to false
             this.enPassant=false;
 
@@ -80,6 +98,7 @@ public class BoardState {
             if(thePiece.pieceLetter=='P' || thePiece.pieceLetter=='p'){
                 if(Math.abs(startPos[0]-endPos[0])==2){
                     this.enPassant=true;
+                    this.enPassantCol=endPos[1];
                 }
             }
 
