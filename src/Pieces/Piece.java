@@ -2,6 +2,8 @@ package Pieces;
 
 import Board.BoardState;
 
+import java.util.ArrayList;
+
 public abstract class Piece {
 
     //0 is black and 1 is white
@@ -10,6 +12,7 @@ public abstract class Piece {
     public int[] position= new int[2];
     public char pieceLetter;
     public boolean hasMoved=false;
+    ArrayList<Piece> moves;
 
     public Piece(boolean color, int[] pos, char letter){
         this.setColor(color);
@@ -34,7 +37,14 @@ public abstract class Piece {
         this.captured=captured;
     }
 
-    public abstract boolean checkMove(BoardState board, int[] startPos, int[] endPos);
+    public boolean inBounds(int r, int c){
+        if(r<0 || c<0 || r>7 || c>7){
+            return false;
+        }
+        return true;
+    }
+
+    public abstract ArrayList<Piece> getMoves(BoardState board);
 
 
 }

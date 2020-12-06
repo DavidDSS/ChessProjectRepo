@@ -2,14 +2,17 @@ package Pieces;
 
 import Board.BoardState;
 
+import java.util.ArrayList;
+
 public class Queen extends Piece {
 
     public Queen(boolean color, int[] pos, char letter){
         super(color, pos, letter);
+        moves= new ArrayList<>();
     }
 
     @Override
-    public boolean checkMove(BoardState board, int[] startPos, int[] endPos) {
-        return false;
+    public ArrayList<Piece> getMoves(BoardState board) {
+        return null;
     }
 }

@@ -2,17 +2,17 @@ package Pieces;
 
 import Board.BoardState;
 
-public class Rook extends Piece{
+import java.util.ArrayList;
 
-    public boolean hasMoved=false;
+public class Rook extends Piece{
 
     public Rook(boolean color, int[] pos, char letter){
         super(color, pos, letter);
+        moves= new ArrayList<>();
     }
 
     @Override
-    public boolean checkMove(BoardState board, int[] startPos, int[] endPos) {
-
-        return false;
+    public ArrayList<Piece> getMoves(BoardState board) {
+        return null;
     }
 }

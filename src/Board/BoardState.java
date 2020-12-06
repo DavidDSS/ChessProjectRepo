@@ -2,11 +2,15 @@ package Board;
 
 import Pieces.*;
 
+import java.util.ArrayList;
+
 public class BoardState {
 
     public Piece[][] theBoard = new Piece[8][8];
     public boolean whiteToMove=true;
     public boolean enPassant=false;
+    ArrayList<Piece> capturedPiecesWhite = new ArrayList<>();
+    ArrayList<Piece> capturedPiecesBlack = new ArrayList<>();
 
     //Starting Position
     public BoardState(){
@@ -38,14 +42,52 @@ public class BoardState {
     }
 
     public void makeMove(int[] startPos, int[] endPos){
-        if(theBoard[startPos[0]][startPos[1]].checkMove(this,startPos,endPos)){
-            theBoard[startPos[0]][startPos[1]].position[0]=endPos[0];
-            theBoard[startPos[0]][startPos[1]].position[1]=endPos[1];
+        ArrayList<Piece> moves= this.theBoard[startPos[0]][startPos[1]].getMoves(this);
 
-            theBoard[endPos[0]][endPos[1]]=theBoard[startPos[0]][startPos[1]];
+        Piece thePiece=null;
+
+        // check to see if the move made is possible
+        for(Piece p : moves){
+            if(p.position[0]==endPos[0] && p.position[1]==endPos[1]){
+                thePiece=p;
+            }
+        }
+
+        if(thePiece!=null){
+            // set en passant flag to false
+            this.enPassant=false;
+
+            // if we are capturing a piece, add the captured piece to respective list
+            if (theBoard[endPos[0]][endPos[1]] != null) {
+                if (this.whiteToMove) {
+                    capturedPiecesBlack.add(theBoard[endPos[0]][endPos[1]]);
+                }
+                else {
+                    capturedPiecesWhite.add(theBoard[endPos[0]][endPos[1]]);
+                }
+            }
+
+            // place the piece in the end position on the board
+            theBoard[endPos[0]][endPos[1]]=thePiece;
+
+            // set the piece's previous position to null
             theBoard[startPos[0]][startPos[1]]=null;
 
+            // set flag so we know the piece has moved
             theBoard[endPos[0]][endPos[1]].hasMoved=true;
+
+            // check if a pawn has moved twice to set en passant flag
+            if(thePiece.pieceLetter=='P' || thePiece.pieceLetter=='p'){
+                if(Math.abs(startPos[0]-endPos[0])==2){
+                    this.enPassant=true;
+                }
+            }
+
+            // change turn
+            this.whiteToMove = !this.whiteToMove;
+
+            // print board
+            this.printBoard();
         }
 
     }
