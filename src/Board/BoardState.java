@@ -43,8 +43,17 @@ public class BoardState {
     }
 
     public void makeMove(int[] startPos, int[] endPos){
-        ArrayList<Piece> moves= this.theBoard[startPos[0]][startPos[1]].getMoves(this);
+        //If white to move and black piece chosen return
+        if(this.whiteToMove && !this.theBoard[startPos[0]][startPos[1]].white) {
+            return;
+        }
 
+        //If black to move and white piece chosen return
+        if(!this.whiteToMove && this.theBoard[startPos[0]][startPos[1]].white) {
+            return;
+        }
+
+        ArrayList<Piece> moves= this.theBoard[startPos[0]][startPos[1]].getMoves(this);
         Piece thePiece=null;
 
         // check to see if the move made is possible
@@ -55,7 +64,6 @@ public class BoardState {
         }
 
         if(thePiece!=null){
-
             // check for enpassant attack
             if(thePiece.pieceLetter=='p' || thePiece.pieceLetter=='P'){
                 // check if move is left or right
