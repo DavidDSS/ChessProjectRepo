@@ -13,6 +13,7 @@ public class Queen extends Piece {
 
     @Override
     public ArrayList<Piece> getMoves(BoardState board) {
+        moves.clear();
 
         Piece rook= new Rook(this.white, this.row, this.col, this.pieceLetter);
         ArrayList<Piece> rookMoves=rook.getMoves(board);
