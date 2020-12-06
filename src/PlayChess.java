@@ -37,24 +37,10 @@ public class PlayChess {
         BoardState board= new BoardState();
         board.printBoard();
 
-        // nf3 nf6
-        board.makeMove(new int[]{7,1},new int[]{5,2});
-        board.makeMove(new int[]{0,1},new int[]{2,2});
+        board.makeMove(new int[]{6,0},new int[]{4,0});
+        board.makeMove(new int[]{1,0},new int[]{3,0});
 
-        board.makeMove(new int[]{6,1},new int[]{5,1});
-        board.makeMove(new int[]{1,1},new int[]{2,1});
-
-        board.makeMove(new int[]{7,2},new int[]{6,1});
-        board.makeMove(new int[]{0,2},new int[]{1,1});
-
-        board.makeMove(new int[]{6,3},new int[]{5,3});
-        board.makeMove(new int[]{1,3},new int[]{2,3});
-
-        board.makeMove(new int[]{7,3},new int[]{6,3});
-        board.makeMove(new int[]{0,3},new int[]{1,3});
-
-        board.makeMove(new int[]{7,4},new int[]{7,2});
-        board.makeMove(new int[]{0,4},new int[]{0,2});
-
+        board.makeMove(new int[]{7,0},new int[]{6,0});
+        board.makeMove(new int[]{0,0},new int[]{2,0});
     }
 }
