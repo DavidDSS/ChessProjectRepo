@@ -112,7 +112,13 @@ public class BoardState {
     }
 
     public void printBoard(){
+        System.out.print("  ");
+        for(int c=0; c<8;c++){
+            System.out.print(c);
+        }
+        System.out.println();
         for(int r=0; r<8; r++){
+            System.out.print(r+" ");
             for(int c=0; c<8; c++){
                 if(theBoard[r][c]!=null)System.out.print(theBoard[r][c].pieceLetter);
                 else System.out.print("-");
