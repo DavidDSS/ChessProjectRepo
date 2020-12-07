@@ -7,9 +7,23 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece {
 
-    public Pawn(boolean color, int r, int c, char letter){
-        super(color, r, c, letter);
+    public Pawn(boolean color, int r, int c){
+        super(color, r, c);
+        this.pieceLetter=color?'p':'P';
+        type=PieceType.PAWN;
         moves= new ArrayList<>();
+
+    }
+
+    public ArrayList<Piece> promote(boolean color, int r, int c){
+        ArrayList<Piece> promotions= new ArrayList<>();
+
+        promotions.add(new Rook(color, r, c));
+        promotions.add(new Knight(color, r, c));
+        promotions.add(new Bishop(color, r, c));
+        promotions.add(new Queen(color, r, c));
+
+        return promotions;
     }
 
     @Override
@@ -22,9 +36,15 @@ public class Pawn extends Piece {
         //White
         if(board.whiteToMove){
             if(inBounds(pr-1,pc) && board.theBoard[pr-1][pc]==null){
-                moves.add(new Pawn(this.white, pr-1, pc, this.pieceLetter));
+                //Pawn reached end of board
+                if((pr-1)==0){
+                    promote(this.white, pr-1, pc).forEach(piece -> moves.add(piece));
+                }
+                else{
+                    moves.add(new Pawn(this.white, pr-1, pc));
+                }
                 if(this.hasMoved==false && board.theBoard[pr-2][pc]==null){
-                    moves.add(new Pawn(this.white, pr-2, pc, this.pieceLetter));
+                    moves.add(new Pawn(this.white, pr-2, pc));
                 }
             }
 
@@ -32,9 +52,15 @@ public class Pawn extends Piece {
         //Black
         else{
             if(inBounds(pr+1,pc) && board.theBoard[pr+1][pc]==null){
-                moves.add(new Pawn(this.white, pr+1, pc, this.pieceLetter));
+                //Pawn reached end of board
+                if((pr+1)==7){
+                    promote(this.white, pr+1, pc).forEach(piece -> moves.add(piece));
+                }
+                else{
+                    moves.add(new Pawn(this.white, pr+1, pc));
+                }
                 if(this.hasMoved==false && board.theBoard[pr+2][pc]==null){
-                    moves.add(new Pawn(this.white, pr+2, pc, this.pieceLetter));
+                    moves.add(new Pawn(this.white, pr+2, pc));
                 }
             }
         }
@@ -44,13 +70,25 @@ public class Pawn extends Piece {
             //Diagonal Left
             if(inBounds(pr-1,pc-1)) {
                 if (board.theBoard[pr - 1][pc - 1] != null && !board.theBoard[pr - 1][pc - 1].white || board.enPassant) {
-                    moves.add(new Pawn(this.white, pr - 1, pc - 1, this.pieceLetter));
+                    //Pawn reached end of board
+                    if((pr-1)==0){
+                        promote(this.white, pr-1, pc-1).forEach(piece -> moves.add(piece));
+                    }
+                    else{
+                        moves.add(new Pawn(this.white, pr - 1, pc - 1));
+                    }
                 }
             }
             //Diagonal Right
             if(inBounds(pr-1,pc+1)) {
                 if (board.theBoard[pr - 1][pc + 1] != null && !board.theBoard[pr - 1][pc + 1].white || board.enPassant) {
-                    moves.add(new Pawn(this.white, pr - 1, pc + 1, this.pieceLetter));
+                    //Pawn reached end of board
+                    if((pr-1)==0){
+                        promote(this.white, pr-1, pc+1).forEach(piece -> moves.add(piece));
+                    }
+                    else{
+                        moves.add(new Pawn(this.white, pr - 1, pc + 1));
+                    }
                 }
             }
         }
@@ -59,13 +97,23 @@ public class Pawn extends Piece {
             //Diagonal Left
             if(inBounds(pr+1,pc-1)) {
                 if (board.theBoard[pr + 1][pc - 1] != null && board.theBoard[pr + 1][pc - 1].white || board.enPassant) {
-                    moves.add(new Pawn(this.white, pr + 1, pc - 1, this.pieceLetter));
+                    if((pr+1)==7){
+                        promote(this.white, pr+1, pc-1).forEach(piece -> moves.add(piece));
+                    }
+                    else{
+                        moves.add(new Pawn(this.white, pr + 1, pc - 1));
+                    }
                 }
             }
             //Diagonal Right
             if(inBounds(pr+1,pc+1)){
                 if(board.theBoard[pr+1][pc+1]!=null && board.theBoard[pr + 1][pc + 1].white || board.enPassant){
-                    moves.add(new Pawn(this.white, pr+1,pc+1, this.pieceLetter));
+                    if((pr+1)==7){
+                        promote(this.white, pr+1, pc+1).forEach(piece -> moves.add(piece));
+                    }
+                    else{
+                        moves.add(new Pawn(this.white, pr+1,pc+1));
+                    }
                 }
             }
 

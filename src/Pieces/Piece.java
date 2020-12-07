@@ -9,18 +9,17 @@ public abstract class Piece {
     //0 is black and 1 is white
     public boolean white=true;
     public boolean captured=false;
-    //public int[] position= new int[2];
     public int row;
     public int col;
     public char pieceLetter;
+    public PieceType type;
     public boolean hasMoved=false;
     ArrayList<Piece> moves;
 
-    public Piece(boolean color, int r, int c, char letter){
+    public Piece(boolean color, int r, int c){
         this.setColor(color);
         this.row= r;
         this.col= c;
-        this.pieceLetter=letter;
     }
 
     public boolean isCaptured(){

@@ -6,8 +6,10 @@ import java.util.ArrayList;
 
 public class King extends Piece {
 
-    public King(boolean color, int r, int c, char letter){
-        super(color, r, c, letter);
+    public King(boolean color, int r, int c){
+        super(color, r, c);
+        type=PieceType.KING;
+        this.pieceLetter=color?'k':'K';
         moves= new ArrayList<>();
     }
 
@@ -33,18 +35,18 @@ public class King extends Piece {
         for(int[] s:spaces){
             if(inBounds(pr+s[0], pc+s[1])) {
                 if (board.theBoard[pr + s[0]][pc + s[1]] == null) {
-                    moves.add(new King(this.white, pr + s[0], pc + s[1], this.pieceLetter));
+                    moves.add(new King(this.white, pr + s[0], pc + s[1]));
                 }
                 else{
                     //If the knight is trying to attack check piece color
                     if(board.whiteToMove) {
                         if (!board.theBoard[pr + s[0]][pc + s[1]].white){
-                            moves.add(new King(this.white, pr + s[0], pc + s[1], this.pieceLetter));
+                            moves.add(new King(this.white, pr + s[0], pc + s[1]));
                         }
                     }
                     else{
                         if (board.theBoard[pr + s[0]][pc + s[1]].white){
-                            moves.add(new King(this.white, pr + s[0], pc + s[1], this.pieceLetter));
+                            moves.add(new King(this.white, pr + s[0], pc + s[1]));
                         }
                     }
                 }
@@ -91,10 +93,10 @@ public class King extends Piece {
             }
         }
         if (kingSideCastle) {
-            moves.add(new King(this.white, pr, pc + 2, this.pieceLetter));
+            moves.add(new King(this.white, pr, pc + 2));
         }
         if (queenSideCastle) {
-            moves.add(new King(this.white, pr, pc - 2, this.pieceLetter));
+            moves.add(new King(this.white, pr, pc - 2));
         }
 
         return moves;

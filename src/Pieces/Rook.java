@@ -6,9 +6,12 @@ import java.util.ArrayList;
 
 public class Rook extends Piece{
 
-    public Rook(boolean color, int r, int c, char letter){
-        super(color, r, c, letter);
+    public Rook(boolean color, int r, int c){
+        super(color, r, c);
+        type=PieceType.ROOK;
+        this.pieceLetter=color?'r':'R';
         moves= new ArrayList<>();
+
     }
 
     @Override
@@ -32,7 +35,7 @@ public class Rook extends Piece{
                 if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
                 //If no piece add move
                 if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
-                    moves.add(new Rook(this.white, pr + i*dir[0], pc + i*dir[1], this.pieceLetter));
+                    moves.add(new Rook(this.white, pr + i*dir[0], pc + i*dir[1]));
                 }
                 //If piece encounter add move if opposite color
                 if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
@@ -43,7 +46,7 @@ public class Rook extends Piece{
                             break;
                         }
                         else {
-                            moves.add(new Rook(this.white, pr + i*dir[0], pc + i*dir[1], this.pieceLetter));
+                            moves.add(new Rook(this.white, pr + i*dir[0], pc + i*dir[1]));
                             break;
                         }
                     }
@@ -54,7 +57,7 @@ public class Rook extends Piece{
                             break;
                         }
                         else {
-                            moves.add(new Rook(this.white, pr + i*dir[0], pc + i*dir[1], this.pieceLetter));
+                            moves.add(new Rook(this.white, pr + i*dir[0], pc + i*dir[1]));
                             break;
                         }
                     }
