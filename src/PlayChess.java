@@ -36,7 +36,6 @@ public class PlayChess {
     public static void main(String[] args){
         BoardState board= new BoardState();
         board.printBoard();
-
         /*while(board.gameState){
 
         }*/
@@ -56,6 +55,9 @@ public class PlayChess {
         board.makeMove(new int[]{6,6},new int[]{7,7});
 
         board.makeMove(new int[]{0,0},new int[]{1,1});
+
+        // for each possible move
+        // AI calculates
 
     }
 }

@@ -2,17 +2,22 @@ package Board;
 
 import Pieces.*;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 
 public class BoardState {
 
     public Piece[][] theBoard = new Piece[8][8];
+    public boolean[][] attackedByPiece= new boolean[8][8];
+
+    ArrayList<Piece> allMoves=new ArrayList<>();
     public boolean whiteToMove=true;
     public boolean kingInCheck=false;
     public Piece pieceAttackingKing;
     public boolean enPassant=false;
     public int enPassantCol;
-    public boolean gameState=true;
+    public boolean gameOver=false;
+
     ArrayList<Piece> capturedPiecesWhite = new ArrayList<>();
     ArrayList<Piece> capturedPiecesBlack = new ArrayList<>();
 
@@ -45,79 +50,122 @@ public class BoardState {
         theBoard[7][4]= new King(true, 7,4);
     }
 
+    public void getAllPossibleMoves () {
+
+        // loop through each square on the board
+        for(int r=0; r<8; r++){
+            for(int c=0; c<8;c++){
+                if(theBoard[r][c]!=null && (whiteToMove==theBoard[r][c].white)) {
+                    ArrayList<Piece> pieceMoves=theBoard[r][c].getMoves(this);
+                    for(Piece p:pieceMoves){
+                        //All Moves for the current player's pieces (white or black)
+                        allMoves.add(p);
+
+                        // check if king is in check
+                        if(kingInCheck){
+                            allMoves = legalMovesKingInCheck();
+                            if (allMoves.size() == 0) {
+                                gameOver = true;
+                                String winner = whiteToMove ? "Black" : "White";
+                                System.out.println(winner + " is victorious.");
+                            }
+                        }
+                        // check if no more moves, stalemate
+                        else if (allMoves.size()==0) {
+                            gameOver = true;
+                            System.out.println("Stalemate: 1/2 - 1/2");
+                        }
+                    }
+                }
+            }
+        }
+
+    } // getAllPossibleMoves
+
+    public ArrayList<Piece> legalMovesKingInCheck () {
+
+        ArrayList<Piece> lineOfAttack= pieceAttackingKing.getMoves(this);
+        ArrayList<Piece> legalMoves= new ArrayList<>();
+
+        //Checks all the possible attacks for the enemy pieces
+        for(int r=0; r<8; r++){
+            for(int c=0; c<8;c++){
+                if(theBoard[r][c]!=null && (whiteToMove!=theBoard[r][c].white)) {
+                    ArrayList<Piece> enemyMoves=theBoard[r][c].getMoves(this);
+                    for(Piece p:enemyMoves){
+                        //All Moves for the current player's pieces (white or black)
+                        //Pawns only attack diagonally
+                        if(p.type==PieceType.PAWN){
+                            if(Math.abs(p.col-c)==1){
+                                attackedByPiece[p.row][p.col]=true;
+                            }
+                        }
+                        //All other pieces attack on end position
+                        else{
+                            attackedByPiece[p.row][p.col]=true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // all possible moves loop
+        for(Piece p : allMoves){
+
+            // possible ways to get out of check
+
+            // 1. move the king
+            if(p.type==PieceType.KING){
+                if(!attackedByPiece[p.row][p.col]){
+                    legalMoves.add(p);
+                }
+            }
+
+            // 2. block the line of attack with a piece
+            for(Piece l:lineOfAttack){
+                if(p.row==l.row && p.col==l.col){
+                    legalMoves.add(p);
+                }
+            }
+
+            // 3. capture the attacking piece
+            if(p.row==pieceAttackingKing.row && p.col==pieceAttackingKing.col){
+                if(p.type==PieceType.PAWN){
+                    Pawn pawn= (Pawn) p;
+                    if(pawn.getAttacking()){
+                        legalMoves.add(p);
+                    }
+                }
+                else{
+                    legalMoves.add(p);
+                }
+            }
+        } // all possible moves
+
+        //Checkmate
+        if(legalMoves.size()==0){
+            gameOver=true;
+            return null;
+        }
+
+        return legalMoves;
+    }
+
     public void makeMove(int[] startPos, int[] endPos){
 
-        // check if empty space selected for start pos
-        if (theBoard[startPos[0]][startPos[1]]== null) {
-            return;
-        }
         //If white to move and black piece chosen return
         if(this.whiteToMove && !this.theBoard[startPos[0]][startPos[1]].white) {
             return;
         }
-
         //If black to move and white piece chosen return
         if(!this.whiteToMove && this.theBoard[startPos[0]][startPos[1]].white) {
             return;
         }
 
-        ArrayList<Piece> moves= this.theBoard[startPos[0]][startPos[1]].getMoves(this);
-        ArrayList<Piece> allMoves=new ArrayList<>();
-        //Generate all possible moves for the A.I
-        if(startPos==null) {
-            for(int r=0; r<8; r++){
-                for(int c=0; c<8;c++){
-                    if(theBoard[r][c]!=null) {
-                        theBoard[r][c].getMoves(this).forEach(move->allMoves.add(move));
-                    }
-                }
-            }
-            //Stalemate
-            if(allMoves.size()==0){
-                gameState=false;
-                return;
-            }
-        }
-
-
-
-        Piece thePiece=null;
-        // check to see if the move made is possible
-        for(Piece p : moves){
-            if(p.row==endPos[0] && p.col==endPos[1]){
-                if(theBoard[endPos[0]][endPos[1]]!=null && theBoard[endPos[0]][endPos[1]].type==PieceType.KING){
-                    kingInCheck=true;
-                    pieceAttackingKing=theBoard[endPos[0]][endPos[1]];
-                }
-                thePiece=p;
-                //ADD PROMOTION SELECT FOR USER!!!
-            }
-        }
+        // get the piece we are trying to move
+        Piece thePiece = theBoard[startPos[0]][startPos[1]];
 
         if(thePiece!=null){
-
-            /*if(kingInCheck){
-
-                // idea
-                // on previous turn, generate 8x8 array of all squares being attacked by opponent
-                // importantly, we need all squares on the attacking line
-
-                // on loop, check if king can move to square not being attacked
-                // check if piece can block along attacking line or capture attacking piece
-
-                for(Piece p : allMoves){
-                    // possible ways to get out of check
-                    // 1. move the king
-                    // 2. block the line of attack with a piece
-                    // 3. capture the attacking piece
-                    if(p.type==PieceType.KING){
-
-                    }
-
-
-
-                }
-            }*/
             // check for castling move
             if (thePiece.type==PieceType.KING) {
                 // king side castles
@@ -153,9 +201,9 @@ public class BoardState {
                         theBoard[0][0] = null;
                     }
                 }
-            } // castling check
+            } // castling
 
-            // check for enpassant attack AND check for promotion
+            // check for enpassant attack and promotion
             if(thePiece.type==PieceType.PAWN){
                 // check if move is left or right (enpassant)
                 if(Math.abs(endPos[1]-startPos[1])==1){
@@ -170,10 +218,28 @@ public class BoardState {
                         }
                     }
                 }
+
+                // promote the pawn at the end of the board
+                if (endPos[0]==0 && whiteToMove) {
+                    Pawn pawn = (Pawn) thePiece;
+                    thePiece = pawn.promote(whiteToMove, endPos[0], endPos[1], 0);
+                }
+                else if (endPos[0]==7 && !whiteToMove) {
+                    Pawn pawn = (Pawn) thePiece;
+                    thePiece = pawn.promote(whiteToMove, endPos[0], endPos[1], 0);
+                }
             } // en passant check
 
-            // set en passant flag to false
+            // set en passant flag back to false
             this.enPassant=false;
+
+            // check if a pawn has moved twice to set en passant flag
+            if(thePiece.type==PieceType.PAWN){
+                if(Math.abs(startPos[0]-endPos[0])==2){
+                    this.enPassant=true;
+                    this.enPassantCol=endPos[1];
+                }
+            }
 
             // if we are capturing a piece, add the captured piece to respective list
             if (theBoard[endPos[0]][endPos[1]] != null) {
@@ -188,26 +254,30 @@ public class BoardState {
             // place the piece in the end position on the board
             theBoard[endPos[0]][endPos[1]]=thePiece;
 
+            // get possible moves of the piece we moved
+            ArrayList<Piece> moves = theBoard[endPos[0]][endPos[1]].getMoves(this);
+
+            // check if the piece we moved has put the king in check
+            for(Piece p : moves){
+                if(theBoard[p.row][p.col]!=null && theBoard[p.row][p.col].type==PieceType.KING){
+                    kingInCheck=true;
+                    pieceAttackingKing=theBoard[endPos[0]][endPos[1]];
+                }
+            }
+
             // set the piece's previous position to null
             theBoard[startPos[0]][startPos[1]]=null;
 
             // set flag so we know the piece has moved
             theBoard[endPos[0]][endPos[1]].hasMoved=true;
 
-            // check if a pawn has moved twice to set en passant flag
-            if(thePiece.type==PieceType.PAWN){
-                if(Math.abs(startPos[0]-endPos[0])==2){
-                    this.enPassant=true;
-                    this.enPassantCol=endPos[1];
-                }
-            }
-
             // change turn
             this.whiteToMove = !this.whiteToMove;
 
             // print board
             this.printBoard();
-        }
+
+        } // if the piece is not null i.e. legal move was attempted
 
     }
 

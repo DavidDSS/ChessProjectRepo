@@ -20,7 +20,6 @@ public class Queen extends Piece {
         Piece rook= new Rook(this.white, this.row, this.col);
         ArrayList<Piece> rookMoves=rook.getMoves(board);
         for(Piece p : rookMoves){
-            char letter= board.whiteToMove?'q':'Q';
             moves.add(new Queen(p.white, p.row, p.col));
 
         }
@@ -28,7 +27,6 @@ public class Queen extends Piece {
         Piece bishop= new Bishop(this.white, this.row, this.col);
         ArrayList<Piece> bishopMoves=bishop.getMoves(board);
         for(Piece p : bishopMoves){
-            char letter= board.whiteToMove?'q':'Q';
             moves.add(new Queen(p.white, p.row, p.col));
 
         }

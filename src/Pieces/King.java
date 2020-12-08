@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class King extends Piece {
 
+    boolean[][] attackedByPiece = new boolean[8][8];
+
     public King(boolean color, int r, int c){
         super(color, r, c);
         type=PieceType.KING;
@@ -31,7 +33,7 @@ public class King extends Piece {
                 {-1,-1},
         };
 
-        //For possible jump check if square is empty or if attacking piece
+        //For possible move check if square is empty or if attacking piece
         for(int[] s:spaces){
             if(inBounds(pr+s[0], pc+s[1])) {
                 if (board.theBoard[pr + s[0]][pc + s[1]] == null) {
@@ -99,6 +101,61 @@ public class King extends Piece {
             moves.add(new King(this.white, pr, pc - 2));
         }
 
+        // double check moves to make sure king does not walk into check
+        moves = getMovesNotInCheck(board, moves);
+
         return moves;
     }
+
+    public ArrayList<Piece> getMovesNotInCheck (BoardState board, ArrayList<Piece> moves) {
+
+        // check all attacked squares by enemy pieces
+        for(int r=0; r<8; r++){
+            for(int c=0; c<8;c++){
+                if(board.theBoard[r][c]!=null && (board.whiteToMove!=board.theBoard[r][c].white)) {
+                    ArrayList<Piece> enemyMoves = board.theBoard[r][c].getMoves(board);
+                    for(Piece p : enemyMoves){
+                        //All Moves for the current player's pieces (white or black)
+                        //Pawns only attack diagonally
+                        if(p.type==PieceType.PAWN){
+                            if(Math.abs(p.col-c)==1){
+                                attackedByPiece[p.row][p.col]=true;
+                            }
+                        }
+                        //All other pieces attack on end position
+                        else{
+                            attackedByPiece[p.row][p.col]=true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // check if king has a legal move
+        ArrayList<Piece> kingMoves= new ArrayList<>();
+        for (Piece m : moves) {
+
+            // king can not castle through check
+
+            // queenside castles
+            if ((m.col-this.col)==-2) {
+                if(!attackedByPiece[this.row][m.col] && !attackedByPiece[this.row][m.col+1]){
+                    kingMoves.add(m);
+                }
+            }
+            // kingside castles
+            else if ((m.col-this.col)==2) {
+                if(!attackedByPiece[this.row][m.col] && !attackedByPiece[this.row][m.col-1]){
+                    kingMoves.add(m);
+                }
+            }
+            // add move if square not attacked by a piece
+            else if (!attackedByPiece[m.row][m.col]) {
+                kingMoves.add(m);
+            }
+        }
+
+        return kingMoves;
+    }
+
 }
