@@ -55,54 +55,54 @@ public class King extends Piece {
             }
         }
 
-        // check if castling is possible for the white king
-        boolean kingSideCastle = true;
-        boolean queenSideCastle = true;
-        int row = board.whiteToMove ? 7 : 0;
+        if(board.whiteToMove && this.white) {
+            // check if castling is possible for the white king
+            boolean kingSideCastle = true;
+            boolean queenSideCastle = true;
+            int row = board.whiteToMove ? 7 : 0;
 
-        for (int i=0; i < 8; i++) {
-            // check if a file rook has moved
-            if (i==0) {
-                // if the rook is in initial position, but has moved, no castle
-                if (board.theBoard[row][i]!=null & board.theBoard[row][i].hasMoved) {
-                    queenSideCastle = false;
+            for (int i = 0; i < 8; i++) {
+                // check if a file rook has moved
+                if (i == 0) {
+                    // if the rook is in initial position, but has moved, no castle
+                    if (board.theBoard[row][i] != null & board.theBoard[row][i].hasMoved) {
+                        queenSideCastle = false;
+                    }
+                } else if (i >= 1 && i <= 3) {
+                    if (board.theBoard[row][i] != null) {
+                        queenSideCastle = false;
+                    }
+                }
+                // check if king has moved
+                else if (i == 4) {
+                    // if the king is in initial position, but has moved, no castle
+                    if (board.theBoard[row][i] != null & board.theBoard[row][i].hasMoved) {
+                        kingSideCastle = false;
+                        queenSideCastle = false;
+                    }
+                } else if (i >= 5 && i <= 6) {
+                    if (board.theBoard[row][i] != null) {
+                        kingSideCastle = false;
+                    }
+                }
+                // check if h file rook has moved
+                else if (i == 7) {
+                    // if the rook is in initial position, but has moved, no castle
+                    if (board.theBoard[row][i] != null & board.theBoard[row][i].hasMoved) {
+                        kingSideCastle = false;
+                    }
                 }
             }
-            else if (i >= 1 && i <= 3) {
-                if (board.theBoard[row][i]!=null) {
-                    queenSideCastle = false;
-                }
+            if (kingSideCastle) {
+                moves.add(new King(this.white, pr, pc + 2));
             }
-            // check if king has moved
-            else if (i==4) {
-                // if the king is in initial position, but has moved, no castle
-                if (board.theBoard[row][i]!=null & board.theBoard[row][i].hasMoved) {
-                    kingSideCastle = false;
-                    queenSideCastle = false;
-                }
+            if (queenSideCastle) {
+                moves.add(new King(this.white, pr, pc - 2));
             }
-            else if (i >= 5 && i <= 6) {
-                if (board.theBoard[row][i]!=null) {
-                    kingSideCastle = false;
-                }
-            }
-            // check if h file rook has moved
-            else if (i==7){
-                // if the rook is in initial position, but has moved, no castle
-                if (board.theBoard[row][i]!=null & board.theBoard[row][i].hasMoved) {
-                    kingSideCastle = false;
-                }
-            }
-        }
-        if (kingSideCastle) {
-            moves.add(new King(this.white, pr, pc + 2));
-        }
-        if (queenSideCastle) {
-            moves.add(new King(this.white, pr, pc - 2));
-        }
 
-        // double check moves to make sure king does not walk into check
-        moves = getMovesNotInCheck(board, moves);
+            // double check moves to make sure king does not walk into check
+            moves = getMovesNotInCheck(board, moves);
+        }
 
         return moves;
     }

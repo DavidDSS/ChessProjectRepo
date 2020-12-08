@@ -50,8 +50,26 @@ public class BoardState {
         theBoard[7][4]= new King(true, 7,4);
     }
 
-    public void getAllPossibleMoves () {
+    public void userMove(int[] startPos, int[] endPos){
+        getAllPossibleMoves();
 
+        ArrayList<Piece> chosenPieceMoves= theBoard[startPos[0]][startPos[1]].getMoves(this);
+        boolean legalMove=false;
+        for(Piece p: chosenPieceMoves){
+            if(p.row==endPos[0] && p.col==endPos[1]){
+                legalMove=true;
+            }
+        }
+        if(legalMove) {
+            makeMove(startPos, endPos);
+        }
+        else{
+            System.out.println("That is not a legal move!");
+        }
+
+    }
+
+    public void getAllPossibleMoves() {
         // loop through each square on the board
         for(int r=0; r<8; r++){
             for(int c=0; c<8;c++){
@@ -60,24 +78,23 @@ public class BoardState {
                     for(Piece p:pieceMoves){
                         //All Moves for the current player's pieces (white or black)
                         allMoves.add(p);
-
-                        // check if king is in check
-                        if(kingInCheck){
-                            allMoves = legalMovesKingInCheck();
-                            if (allMoves.size() == 0) {
-                                gameOver = true;
-                                String winner = whiteToMove ? "Black" : "White";
-                                System.out.println(winner + " is victorious.");
-                            }
-                        }
-                        // check if no more moves, stalemate
-                        else if (allMoves.size()==0) {
-                            gameOver = true;
-                            System.out.println("Stalemate: 1/2 - 1/2");
-                        }
                     }
                 }
             }
+        }
+        // check if king is in check
+        if(kingInCheck){
+            allMoves = legalMovesKingInCheck();
+            if (allMoves.size() == 0) {
+                gameOver = true;
+                String winner = whiteToMove ? "Black" : "White";
+                System.out.println(winner + " is victorious.");
+            }
+        }
+        // check if no more moves, stalemate
+        else if (allMoves.size()==0) {
+            gameOver = true;
+            System.out.println("Stalemate: 1/2 - 1/2");
         }
 
     } // getAllPossibleMoves
@@ -253,6 +270,9 @@ public class BoardState {
 
             // place the piece in the end position on the board
             theBoard[endPos[0]][endPos[1]]=thePiece;
+            // update the objects location on the board
+            thePiece.row = endPos[0];
+            thePiece.col = endPos[1];
 
             // get possible moves of the piece we moved
             ArrayList<Piece> moves = theBoard[endPos[0]][endPos[1]].getMoves(this);

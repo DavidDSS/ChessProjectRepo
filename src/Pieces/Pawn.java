@@ -52,7 +52,7 @@ public class Pawn extends Piece {
         if(board.whiteToMove){
             if(inBounds(pr-1,pc) && board.theBoard[pr-1][pc]==null){
                 moves.add(new Pawn(this.white, pr-1, pc));
-                if(this.hasMoved==false && board.theBoard[pr-2][pc]==null){
+                if(inBounds(pr-2,pc) && this.hasMoved==false && board.theBoard[pr-2][pc]==null){
                     moves.add(new Pawn(this.white, pr-2, pc));
                 }
             }
@@ -62,7 +62,7 @@ public class Pawn extends Piece {
         else{
             if(inBounds(pr+1,pc) && board.theBoard[pr+1][pc]==null){
                 moves.add(new Pawn(this.white, pr+1, pc));
-                if(this.hasMoved==false && board.theBoard[pr+2][pc]==null){
+                if(inBounds(pr+2,pc) && this.hasMoved==false && board.theBoard[pr+2][pc]==null){
                     moves.add(new Pawn(this.white, pr+2, pc));
                 }
             }
