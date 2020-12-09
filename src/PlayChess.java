@@ -124,13 +124,13 @@ public class PlayChess {
 
         while(!board.gameOver){
             Scanner playerMove= new Scanner(System.in); //System.in is a standard input stream.
-            System.out.print("Piece to Move: ");
+            System.out.print("Position of piece you want to move: ");
             String move= playerMove.nextLine();
             char[] input = new char[2];
             input[0]=move.charAt(0);
             input[1]=move.charAt(1);
 
-            System.out.print("End Position: ");
+            System.out.print("End Position of the piece: ");
             String moveEnd= playerMove.nextLine();
             System.out.println();
             char[] inputEnd = new char[2];
@@ -148,7 +148,7 @@ public class PlayChess {
             }
         }
 
-
+        System.out.println("Game over!");
         // stalemate check
         /*
         board.userMove(convertNotation(new char[]{'e','2'}),convertNotation(new char[]{'e','3'}));

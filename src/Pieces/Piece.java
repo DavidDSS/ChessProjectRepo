@@ -14,6 +14,7 @@ public abstract class Piece {
     public char pieceLetter;
     public PieceType type;
     public boolean hasMoved=false;
+    public boolean isPinned = false;
     ArrayList<Piece> moves;
 
     public Piece(boolean color, int r, int c){
