@@ -35,9 +35,93 @@ public class PlayChess {
     }
 
     public static void main(String[] args){
-        BoardState board= new BoardState();
-        board.printBoard();
-        /*
+
+        BoardState board=null;
+
+        Scanner gameMode= new Scanner(System.in);
+        System.out.println("Press 0 to use Classic Board \nPress 1 to use Custom Board (Testing)");
+        int choice= gameMode.nextInt();
+
+        //User chose to use classic board
+        if(choice==0) {
+            board= new BoardState(0);
+            board.printBoard();
+        }
+        //User chose to use custom board
+        else{
+            board= new BoardState(1);
+
+            Scanner pieceLocation= new Scanner(System.in);
+            System.out.print("Select the board position the WHITE king should be placed: ");
+            String piecePosW= pieceLocation.nextLine();
+            char[] inputW = new char[2];
+            inputW[0]=piecePosW.charAt(0);
+            inputW[1]=piecePosW.charAt(1);
+            board.setPiece(true, 'k',convertNotation(inputW)[0],convertNotation(inputW)[1]);
+
+            System.out.print("Select the board position the BLACK king should be placed: ");
+            String piecePosB= pieceLocation.nextLine();
+            char[] inputB = new char[2];
+            inputB[0]=piecePosB.charAt(0);
+            inputB[1]=piecePosB.charAt(1);
+            board.setPiece(false, 'K',convertNotation(inputB)[0],convertNotation(inputB)[1]);
+
+            int pieceChoice;
+
+            do{
+                System.out.println("Select the piece you want to add next");
+                System.out.println("Press 0 for Pawn");
+                System.out.println("Press 1 for Rook");
+                System.out.println("Press 2 for Knight");
+                System.out.println("Press 3 for Bishop");
+                System.out.println("Press 4 for Queen");
+                System.out.println("Press 5 to Stop Adding Pieces and PLAY");
+
+                Scanner newPiece= new Scanner(System.in);
+                pieceChoice=newPiece.nextInt();
+
+                if(pieceChoice!=5) {
+                    System.out.println("What Color is the Piece \nPress 0 for White \nPress 1 for Black");
+
+                    int pieceColor = newPiece.nextInt();
+                    boolean colorChoice = pieceColor == 0 ? true : false;
+
+                    char pLetter = 'p';
+                    switch (pieceChoice) {
+                        case 0:
+                            pLetter = colorChoice ? 'p' : 'P';
+                            break;
+                        case 1:
+                            pLetter = colorChoice ? 'r' : 'R';
+                            break;
+                        case 2:
+                            pLetter = colorChoice ? 'n' : 'n';
+                            break;
+                        case 3:
+                            pLetter = colorChoice ? 'b' : 'B';
+                            break;
+                        case 4:
+                            pLetter = colorChoice ? 'q' : 'Q';
+                            break;
+                    }
+
+
+                    System.out.print("Select the board position of your piece: ");
+                    String piecePos = pieceLocation.nextLine();
+
+                    char[] inputP = new char[2];
+                    inputP[0] = piecePos.charAt(0);
+                    inputP[1] = piecePos.charAt(1);
+                    board.setPiece(colorChoice, pLetter, convertNotation(inputP)[0], convertNotation(inputP)[1]);
+                }
+
+            }
+            while(pieceChoice!=5);
+
+            board.printBoard();
+
+        }
+
         while(!board.gameOver){
             Scanner playerMove= new Scanner(System.in); //System.in is a standard input stream.
             System.out.print("Piece to Move: ");
@@ -45,25 +129,28 @@ public class PlayChess {
             char[] input = new char[2];
             input[0]=move.charAt(0);
             input[1]=move.charAt(1);
+
             System.out.print("End Position: ");
             String moveEnd= playerMove.nextLine();
+            System.out.println();
             char[] inputEnd = new char[2];
             inputEnd[0]=moveEnd.charAt(0);
             inputEnd[1]=moveEnd.charAt(1);
+
             int[] theMove = convertNotation(input);
             int[] endMove = convertNotation(inputEnd);
+
             if (theMove[0] == -9999 || theMove[1] == -9999 || endMove[0] == -9999 || endMove[1] == -9999) {
                 continue;
             }
             else {
                 board.userMove(theMove,endMove);
             }
-
-
         }
 
-        */
+
         // stalemate check
+        /*
         board.userMove(convertNotation(new char[]{'e','2'}),convertNotation(new char[]{'e','3'}));
         board.userMove(convertNotation(new char[]{'a','7'}),convertNotation(new char[]{'a','5'}));
         board.userMove(convertNotation(new char[]{'d','1'}),convertNotation(new char[]{'h','5'}));
@@ -85,5 +172,7 @@ public class PlayChess {
         board.userMove(convertNotation(new char[]{'c','8'}),convertNotation(new char[]{'e','6'}));
 
         System.out.println(board.gameOver);
+
+         */
     }
 }
