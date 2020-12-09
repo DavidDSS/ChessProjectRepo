@@ -37,6 +37,7 @@ public class PlayChess {
     public static void main(String[] args){
         BoardState board= new BoardState();
         board.printBoard();
+        /*
         while(!board.gameOver){
             Scanner playerMove= new Scanner(System.in); //System.in is a standard input stream.
             System.out.print("Piece to Move: ");
@@ -49,10 +50,40 @@ public class PlayChess {
             char[] inputEnd = new char[2];
             inputEnd[0]=moveEnd.charAt(0);
             inputEnd[1]=moveEnd.charAt(1);
+            int[] theMove = convertNotation(input);
+            int[] endMove = convertNotation(inputEnd);
+            if (theMove[0] == -9999 || theMove[1] == -9999 || endMove[0] == -9999 || endMove[1] == -9999) {
+                continue;
+            }
+            else {
+                board.userMove(theMove,endMove);
+            }
 
-            board.userMove(convertNotation(input),convertNotation(inputEnd));
+
         }
 
+        */
+        // stalemate check
+        board.userMove(convertNotation(new char[]{'e','2'}),convertNotation(new char[]{'e','3'}));
+        board.userMove(convertNotation(new char[]{'a','7'}),convertNotation(new char[]{'a','5'}));
+        board.userMove(convertNotation(new char[]{'d','1'}),convertNotation(new char[]{'h','5'}));
+        board.userMove(convertNotation(new char[]{'a','8'}),convertNotation(new char[]{'a','6'}));
+        board.userMove(convertNotation(new char[]{'h','5'}),convertNotation(new char[]{'a','5'}));
+        board.userMove(convertNotation(new char[]{'h','7'}),convertNotation(new char[]{'h','5'}));
+        board.userMove(convertNotation(new char[]{'h','2'}),convertNotation(new char[]{'h','4'}));
+        board.userMove(convertNotation(new char[]{'a','6'}),convertNotation(new char[]{'h','6'}));
+        board.userMove(convertNotation(new char[]{'a','5'}),convertNotation(new char[]{'c','7'}));
+        board.userMove(convertNotation(new char[]{'f','7'}),convertNotation(new char[]{'f','6'}));
+        board.userMove(convertNotation(new char[]{'c','7'}),convertNotation(new char[]{'d','7'}));
+        board.userMove(convertNotation(new char[]{'e','8'}),convertNotation(new char[]{'f','7'}));
+        board.userMove(convertNotation(new char[]{'d','7'}),convertNotation(new char[]{'b','7'}));
+        board.userMove(convertNotation(new char[]{'d','8'}),convertNotation(new char[]{'d','3'}));
+        board.userMove(convertNotation(new char[]{'b','7'}),convertNotation(new char[]{'b','8'}));
+        board.userMove(convertNotation(new char[]{'d','3'}),convertNotation(new char[]{'h','7'}));
+        board.userMove(convertNotation(new char[]{'b','8'}),convertNotation(new char[]{'c','8'}));
+        board.userMove(convertNotation(new char[]{'f','7'}),convertNotation(new char[]{'g','6'}));
+        board.userMove(convertNotation(new char[]{'c','8'}),convertNotation(new char[]{'e','6'}));
 
+        System.out.println(board.gameOver);
     }
 }

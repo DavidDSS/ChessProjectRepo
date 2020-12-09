@@ -1,7 +1,6 @@
 package Pieces;
 
 import Board.BoardState;
-import javafx.beans.binding.ObjectExpression;
 
 import java.util.ArrayList;
 

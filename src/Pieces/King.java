@@ -40,7 +40,7 @@ public class King extends Piece {
                     moves.add(new King(this.white, pr + s[0], pc + s[1]));
                 }
                 else{
-                    //If the knight is trying to attack check piece color
+                    //If the king is trying to attack check piece color
                     if(board.whiteToMove) {
                         if (!board.theBoard[pr + s[0]][pc + s[1]].white){
                             moves.add(new King(this.white, pr + s[0], pc + s[1]));
@@ -65,7 +65,7 @@ public class King extends Piece {
                 // check if a file rook has moved
                 if (i == 0) {
                     // if the rook is in initial position, but has moved, no castle
-                    if (board.theBoard[row][i] != null & board.theBoard[row][i].hasMoved) {
+                    if (board.theBoard[row][i] != null && board.theBoard[row][i].hasMoved) {
                         queenSideCastle = false;
                     }
                 } else if (i >= 1 && i <= 3) {
@@ -76,7 +76,7 @@ public class King extends Piece {
                 // check if king has moved
                 else if (i == 4) {
                     // if the king is in initial position, but has moved, no castle
-                    if (board.theBoard[row][i] != null & board.theBoard[row][i].hasMoved) {
+                    if (board.theBoard[row][i] != null && board.theBoard[row][i].hasMoved) {
                         kingSideCastle = false;
                         queenSideCastle = false;
                     }
@@ -88,7 +88,7 @@ public class King extends Piece {
                 // check if h file rook has moved
                 else if (i == 7) {
                     // if the rook is in initial position, but has moved, no castle
-                    if (board.theBoard[row][i] != null & board.theBoard[row][i].hasMoved) {
+                    if (board.theBoard[row][i] != null && board.theBoard[row][i].hasMoved) {
                         kingSideCastle = false;
                     }
                 }
@@ -113,6 +113,7 @@ public class King extends Piece {
         for(int r=0; r<8; r++){
             for(int c=0; c<8;c++){
                 if(board.theBoard[r][c]!=null && (board.whiteToMove!=board.theBoard[r][c].white)) {
+
                     ArrayList<Piece> enemyMoves = board.theBoard[r][c].getMoves(board);
                     for(Piece p : enemyMoves){
                         //All Moves for the current player's pieces (white or black)

@@ -13,7 +13,7 @@ public class BoardState {
     ArrayList<Piece> allMoves=new ArrayList<>();
     public boolean whiteToMove=true;
     public boolean kingInCheck=false;
-    public Piece pieceAttackingKing;
+    public ArrayList<Piece> piecesAttackingKing = new ArrayList<>();
     public boolean enPassant=false;
     public int enPassantCol;
     public boolean gameOver=false;
@@ -51,15 +51,43 @@ public class BoardState {
     }
 
     public void userMove(int[] startPos, int[] endPos){
-        getAllPossibleMoves();
 
-        ArrayList<Piece> chosenPieceMoves= theBoard[startPos[0]][startPos[1]].getMoves(this);
         boolean legalMove=false;
-        for(Piece p: chosenPieceMoves){
-            if(p.row==endPos[0] && p.col==endPos[1]){
-                legalMove=true;
+
+        // user chose empty square
+        if(theBoard[startPos[0]][startPos[1]]==null){
+            System.out.println("That is not a legal move!");
+            return;
+        }
+
+        // the chosen piece
+        ArrayList<Piece> chosenPieceMoves = theBoard[startPos[0]][startPos[1]].getMoves(this);
+
+        // check if the king is in check, user has to react
+        if (kingInCheck) {
+            // get the legal moves
+            allMoves = legalMovesKingInCheck();
+
+            // check if the user chose a legal move to evade check
+            for (Piece a : allMoves) {
+                for (Piece p : chosenPieceMoves) {
+                    if (p.row == a.row && p.col == a.col && p.white == a.white && p.type == a.type) {
+                        legalMove = true;
+                    }
+                }
+            }
+
+        }
+        // check if the user entered valid end position
+        else {
+            for(Piece p : chosenPieceMoves){
+                if(p.row==endPos[0] && p.col==endPos[1]){
+                    legalMove=true;
+                }
             }
         }
+
+        // if the user move is legal, actually make the move
         if(legalMove) {
             makeMove(startPos, endPos);
         }
@@ -70,11 +98,14 @@ public class BoardState {
     }
 
     public void getAllPossibleMoves() {
+        allMoves.clear();
+
         // loop through each square on the board
         for(int r=0; r<8; r++){
             for(int c=0; c<8;c++){
+                // only get the correct colour moves
                 if(theBoard[r][c]!=null && (whiteToMove==theBoard[r][c].white)) {
-                    ArrayList<Piece> pieceMoves=theBoard[r][c].getMoves(this);
+                    ArrayList<Piece> pieceMoves = theBoard[r][c].getMoves(this);
                     for(Piece p:pieceMoves){
                         //All Moves for the current player's pieces (white or black)
                         allMoves.add(p);
@@ -82,8 +113,19 @@ public class BoardState {
                 }
             }
         }
-        // check if king is in check
-        if(kingInCheck){
+
+    } // getAllPossibleMoves
+
+    public void checkStalemate () {
+        getAllPossibleMoves();
+        if (allMoves.size() == 0) {
+            gameOver = true;
+            System.out.println("Stalemate: 1/2 - 1/2");
+        }
+    }
+    public void checkCheckmate () {
+
+        if (kingInCheck) {
             allMoves = legalMovesKingInCheck();
             if (allMoves.size() == 0) {
                 gameOver = true;
@@ -91,17 +133,83 @@ public class BoardState {
                 System.out.println(winner + " is victorious.");
             }
         }
-        // check if no more moves, stalemate
-        else if (allMoves.size()==0) {
-            gameOver = true;
-            System.out.println("Stalemate: 1/2 - 1/2");
+    }
+
+    public ArrayList<Piece> getLineOfAttack () {
+
+        if (piecesAttackingKing == null || piecesAttackingKing.size() < 1) return null;
+        Piece attackingPiece = piecesAttackingKing.get(0);
+        ArrayList<Piece> lineOfAttack = new ArrayList<>();
+        Piece king = null;
+
+        // get the position of the black king
+        for(int r=0; r<8; r++) {
+            for (int c = 0; c < 8; c++) {
+                if(theBoard[r][c]!=null && theBoard[r][c].type==PieceType.KING && theBoard[r][c].white==whiteToMove){
+                    king = theBoard[r][c];
+                    break;
+                }
+            }
+            if (king!=null) break;
         }
 
-    } // getAllPossibleMoves
+        int rowDistance, colDistance;
+        rowDistance = attackingPiece.row - king.row;
+        colDistance = attackingPiece.col - king.col;
+
+        // if the attacking piece is a knight
+        if (attackingPiece.type == PieceType.KNIGHT) {
+            return lineOfAttack;
+        }
+        // if the attacking piece is a pawn
+        else if (attackingPiece.type == PieceType.PAWN) {
+            return lineOfAttack;
+        }
+        // if the attacking piece is a rook or a queen
+        if (attackingPiece.type == PieceType.ROOK || attackingPiece.type == PieceType.QUEEN) {
+            if (attackingPiece.col == king.col) {
+                int inc = rowDistance > 0 ? -1 : 1;
+                for (int i = attackingPiece.row; i < king.row; i += inc) {
+                    if (attackingPiece.type == PieceType.ROOK) {
+                        lineOfAttack.add(new Rook(attackingPiece.white, i, attackingPiece.col));
+                    } else {
+                        lineOfAttack.add(new Queen(attackingPiece.white, i, attackingPiece.col));
+                    }
+                }
+            }
+            else if (attackingPiece.row == king.row){
+                int inc = colDistance > 0 ? -1 : 1;
+                for (int i = attackingPiece.row; i < king.row; i += inc) {
+                    if (attackingPiece.type == PieceType.ROOK) {
+                        lineOfAttack.add(new Rook(attackingPiece.white, attackingPiece.row, i));
+                    } else {
+                        lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row, i));
+                    }
+                }
+            }
+        }
+        // if the attacking piece is a bishop or a queen
+        if (attackingPiece.type == PieceType.BISHOP || attackingPiece.type == PieceType.QUEEN) {
+            int incRow = rowDistance > 0 ? -1 : 1;
+            int incCol = colDistance > 0 ? -1 : 1;
+            int destination = attackingPiece.row+incRow;
+            while (destination != king.row) {
+                if (attackingPiece.type == PieceType.BISHOP) {
+                    lineOfAttack.add(new Bishop(attackingPiece.white, attackingPiece.row+incRow, attackingPiece.col+incCol));
+                }
+                else {
+                    lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row+incRow, attackingPiece.col+incCol));
+                }
+                destination += incRow;
+            }
+        }
+
+        return lineOfAttack;
+    }
 
     public ArrayList<Piece> legalMovesKingInCheck () {
 
-        ArrayList<Piece> lineOfAttack= pieceAttackingKing.getMoves(this);
+        ArrayList<Piece> lineOfAttack= getLineOfAttack();
         ArrayList<Piece> legalMoves= new ArrayList<>();
 
         //Checks all the possible attacks for the enemy pieces
@@ -126,11 +234,10 @@ public class BoardState {
             }
         }
 
+        getAllPossibleMoves();
         // all possible moves loop
         for(Piece p : allMoves){
-
             // possible ways to get out of check
-
             // 1. move the king
             if(p.type==PieceType.KING){
                 if(!attackedByPiece[p.row][p.col]){
@@ -139,36 +246,37 @@ public class BoardState {
             }
 
             // 2. block the line of attack with a piece
-            for(Piece l:lineOfAttack){
-                if(p.row==l.row && p.col==l.col){
-                    legalMoves.add(p);
-                }
-            }
-
-            // 3. capture the attacking piece
-            if(p.row==pieceAttackingKing.row && p.col==pieceAttackingKing.col){
-                if(p.type==PieceType.PAWN){
-                    Pawn pawn= (Pawn) p;
-                    if(pawn.getAttacking()){
+            if (piecesAttackingKing.size() == 1) {
+                for(Piece l:lineOfAttack){
+                    if(p.row==l.row && p.col==l.col){
                         legalMoves.add(p);
                     }
                 }
-                else{
-                    legalMoves.add(p);
+            }
+
+
+            // 3. capture the attacking piece
+            if (piecesAttackingKing.size() == 1) {
+                if (p.row == piecesAttackingKing.get(0).row && p.col == piecesAttackingKing.get(0).col) {
+                    if (p.type == PieceType.PAWN) {
+                        Pawn pawn = (Pawn) p;
+                        if (pawn.getAttacking()) {
+                            legalMoves.add(p);
+                        }
+                    } else if (p.type!=PieceType.KING){
+                        legalMoves.add(p);
+                    }
                 }
             }
         } // all possible moves
-
-        //Checkmate
-        if(legalMoves.size()==0){
-            gameOver=true;
-            return null;
-        }
 
         return legalMoves;
     }
 
     public void makeMove(int[] startPos, int[] endPos){
+
+        piecesAttackingKing.clear();
+        kingInCheck = false;
 
         //If white to move and black piece chosen return
         if(this.whiteToMove && !this.theBoard[startPos[0]][startPos[1]].white) {
@@ -193,12 +301,18 @@ public class BoardState {
                         theBoard[7][5] = new Rook(true, 7, 5);
                         theBoard[7][5].hasMoved = true;
                         theBoard[7][7] = null;
+                        // update the objects location on the board
+                        theBoard[7][5].row = 7;
+                        theBoard[7][5].col = 5;
                     }
                     else {
                         // only move the rook
                         theBoard[0][5] = new Rook(false, 0, 5);
                         theBoard[0][5].hasMoved = true;
                         theBoard[0][7] = null;
+                        // update the objects location on the board
+                        theBoard[0][5].row = 0;
+                        theBoard[0][5].col = 5;
                     }
                 }
 
@@ -210,12 +324,18 @@ public class BoardState {
                         theBoard[7][3] = new Rook(true, 7, 3);
                         theBoard[7][3].hasMoved = true;
                         theBoard[7][0] = null;
+                        // update the objects location on the board
+                        theBoard[7][3].row = 7;
+                        theBoard[7][3].col = 3;
                     }
                     else {
                         // only move the rook
                         theBoard[0][3] = new Rook(false, 0, 3);
                         theBoard[0][3].hasMoved = true;
                         theBoard[0][0] = null;
+                        // update the objects location on the board
+                        theBoard[0][3].row = 0;
+                        theBoard[0][3].col = 3;
                     }
                 }
             } // castling
@@ -276,12 +396,26 @@ public class BoardState {
 
             // get possible moves of the piece we moved
             ArrayList<Piece> moves = theBoard[endPos[0]][endPos[1]].getMoves(this);
-
             // check if the piece we moved has put the king in check
             for(Piece p : moves){
                 if(theBoard[p.row][p.col]!=null && theBoard[p.row][p.col].type==PieceType.KING){
                     kingInCheck=true;
-                    pieceAttackingKing=theBoard[endPos[0]][endPos[1]];
+                    piecesAttackingKing.add(theBoard[endPos[0]][endPos[1]]);
+                }
+            }
+            // check for a double check, other pieces attacking the king
+            for (int r=0; r<8; r++) {
+                for (int c=0; c<8; c++) {
+                    // not the same piece
+                    if(theBoard[r][c]!=null && theBoard[r][c].white==whiteToMove && r!=startPos[0] && c!=startPos[1]) {
+                        moves = theBoard[r][c].getMoves(this);
+                        for (Piece p : moves) {
+                            if (theBoard[p.row][p.col]!=null && theBoard[p.row][p.col].type==PieceType.KING) {
+                                kingInCheck = true;
+                                piecesAttackingKing.add(p);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -294,7 +428,13 @@ public class BoardState {
             // change turn
             this.whiteToMove = !this.whiteToMove;
 
-            // print board
+            // check for checkmate
+            checkCheckmate();
+
+            // check for stalemate
+            checkStalemate();
+
+            // check to see if the game is over
             this.printBoard();
 
         } // if the piece is not null i.e. legal move was attempted
