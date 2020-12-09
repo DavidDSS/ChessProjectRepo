@@ -127,9 +127,16 @@ public class BoardState {
 
     public void checkStalemate () {
         getAllPossibleMoves();
-        if (allMoves.size() == 0) {
-            gameOver = true;
-            System.out.println("Stalemate: 1/2 - 1/2");
+        boolean otherThanKing=false;
+        for(Piece p:allMoves){
+            if(p.type!=PieceType.KING) otherThanKing=true;
+        }
+        if(!otherThanKing) {
+            allMoves = legalMovesKingInCheck();
+            if (allMoves.size() == 0) {
+                gameOver = true;
+                System.out.println("Stalemate: 1/2 - 1/2");
+            }
         }
     }
     public void checkCheckmate () {

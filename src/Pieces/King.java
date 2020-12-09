@@ -140,14 +140,18 @@ public class King extends Piece {
 
             // queenside castles
             if ((m.col-this.col)==-2) {
-                if(!attackedByPiece[this.row][m.col] && !attackedByPiece[this.row][m.col+1]){
-                    kingMoves.add(m);
+                if(inBounds(this.row,m.col)) {
+                    if (!attackedByPiece[this.row][m.col] && !attackedByPiece[this.row][m.col + 1]) {
+                        kingMoves.add(m);
+                    }
                 }
             }
             // kingside castles
             else if ((m.col-this.col)==2) {
-                if(!attackedByPiece[this.row][m.col] && !attackedByPiece[this.row][m.col-1]){
-                    kingMoves.add(m);
+                if(inBounds(this.row,m.col)) {
+                    if (!attackedByPiece[this.row][m.col] && !attackedByPiece[this.row][m.col - 1]) {
+                        kingMoves.add(m);
+                    }
                 }
             }
             // add move if square not attacked by a piece
