@@ -9,6 +9,8 @@ public abstract class Piece {
     //0 is black and 1 is white
     public boolean white=true;
     public boolean captured=false;
+    public int prevRow;
+    public int prevCol;
     public int row;
     public int col;
     public char pieceLetter;

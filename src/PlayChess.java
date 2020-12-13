@@ -44,12 +44,13 @@ public class PlayChess {
 
         //User chose to use classic board
         if(choice==0) {
-            board= new BoardState(0);
+            board= new BoardState(null);
+            board.setClassicalPosition();
             board.printBoard();
         }
         //User chose to use custom board
         else{
-            board= new BoardState(1);
+            board= new BoardState(null);
 
             Scanner pieceLocation= new Scanner(System.in);
             System.out.print("Select the board position the WHITE king should be placed: ");
@@ -123,7 +124,8 @@ public class PlayChess {
         }
 
         while(!board.gameOver){
-            Scanner playerMove= new Scanner(System.in); //System.in is a standard input stream.
+            // take user input for move
+            Scanner playerMove= new Scanner(System.in);
             System.out.print("Position of piece you want to move: ");
             String move= playerMove.nextLine();
             char[] input = new char[2];
@@ -137,13 +139,16 @@ public class PlayChess {
             inputEnd[0]=moveEnd.charAt(0);
             inputEnd[1]=moveEnd.charAt(1);
 
+            // convert the algebraic notation into array notation for our silicon friend
             int[] theMove = convertNotation(input);
             int[] endMove = convertNotation(inputEnd);
 
+            // check for valid move input by the user
             if (theMove[0] == -9999 || theMove[1] == -9999 || endMove[0] == -9999 || endMove[1] == -9999) {
                 continue;
             }
             else {
+                // make the move
                 board.userMove(theMove,endMove);
             }
         }

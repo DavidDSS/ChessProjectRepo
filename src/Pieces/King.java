@@ -56,7 +56,7 @@ public class King extends Piece {
         }
 
         if(board.whiteToMove && this.white) {
-            // check if castling is possible for the white king
+            // check if castling is possible for the white or black king
             boolean kingSideCastle = true;
             boolean queenSideCastle = true;
             int row = board.whiteToMove ? 7 : 0;
