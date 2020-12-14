@@ -10,30 +10,88 @@ public class BoardState {
 
     public Piece[][] theBoard = new Piece[8][8];
     public boolean[][] attackedByPiece= new boolean[8][8];
-    public double evaluation=0;
-    public boolean whiteToMove=true;
-    public boolean kingInCheck=false;
+
+    public double evaluation = 0;
+    public int enPassantRow = 0;
+    public int enPassantCol = 0;
+
+    public boolean whiteToMove = true;
+    public boolean kingInCheck = false;
+    public boolean enPassant = false;
+    public boolean gameOver = false;
+
     public ArrayList<Piece> piecesAttackingKing = new ArrayList<>();
-    public boolean enPassant=false;
-    public int enPassantCol;
-    public boolean gameOver=false;
+    public ArrayList<Piece> capturedPiecesWhite = new ArrayList<>();
+    public ArrayList<Piece> capturedPiecesBlack = new ArrayList<>();
 
-    ArrayList<Piece> capturedPiecesWhite = new ArrayList<>();
-    ArrayList<Piece> capturedPiecesBlack = new ArrayList<>();
+    public BoardState(BoardState b){
 
-    //Starting Position
-    public BoardState(Piece[][] position){
-        if (position != null) {
-            theBoard = position;
+        if (b != null) {
+            this.evaluation = b.evaluation;
+            this.whiteToMove = b.whiteToMove;
+            this.kingInCheck = b.kingInCheck;
+            this.enPassant = b.enPassant;
+            this.enPassantRow = b.enPassantRow;
+            this.enPassantCol = b.enPassantCol;
+            this.gameOver = b.gameOver;
+            this.piecesAttackingKing = b.piecesAttackingKing;
+            this.capturedPiecesBlack = b.capturedPiecesBlack;
+            this.capturedPiecesWhite = b.capturedPiecesWhite;
+
+            // deep copy of the board and pieces
+            this.theBoard = b.theBoard.clone();
+            this.theBoard = this.createDeepCopy(b.theBoard);
+            this.attackedByPiece = b.attackedByPiece.clone();
+
         }
-    }
+    } // copy constructor
+
+    public Piece[][] createDeepCopy (Piece[][] board) {
+
+        Piece[][] copy = new Piece[8][8];
+        // make deep copy of pieces
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+
+                if (board[r][c] != null) {
+                    if (board[r][c].type == PieceType.PAWN) {
+                        copy[r][c] = new Pawn(board[r][c].white, board[r][c].row, board[r][c].col);
+                    }
+                    else if (board[r][c].type == PieceType.KING) {
+                        copy[r][c] = new King(board[r][c].white, board[r][c].row, board[r][c].col);
+                    }
+                    else if (board[r][c].type == PieceType.QUEEN) {
+                        copy[r][c] = new Queen(board[r][c].white, board[r][c].row, board[r][c].col);
+                    }
+                    else if (board[r][c].type == PieceType.KNIGHT) {
+                        copy[r][c] = new Knight(board[r][c].white, board[r][c].row, board[r][c].col);
+                    }
+                    else if (board[r][c].type == PieceType.BISHOP) {
+                        copy[r][c] = new Bishop(board[r][c].white, board[r][c].row, board[r][c].col);
+                    }
+                    else if (board[r][c].type == PieceType.ROOK) {
+                        copy[r][c] = new Rook(board[r][c].white, board[r][c].row, board[r][c].col);
+                    }
+                }
+            }
+        }
+
+        return copy;
+    } // createDeepCopy
 
     public void engineMove () {
 
         Engine e = new Engine(this);
         Piece move = e.calculateBestMove();
-        makeMove(new int[]{move.prevRow, move.prevCol}, new int[]{move.row, move.col});
 
+        // if no move returned
+        if (move == null) {
+            checkStalemate();
+            checkCheckmate();
+        }
+        else {
+            makeMove(new int[]{move.prevRow, move.prevCol}, new int[]{move.row, move.col});
+        }
     }
 
     public double evaluatePosition () {
@@ -61,6 +119,8 @@ public class BoardState {
             }
         }
 
+        // set and return the evaluation
+        this.evaluation = eval;
         return eval;
     }
 
@@ -146,7 +206,7 @@ public class BoardState {
             moves = legalMovesKingInCheck();
             if (moves.size() == 0) {
                 gameOver = true;
-                System.out.println("Stalemate: 1/2 - 1/2");
+                //System.out.println("Stalemate: 1/2 - 1/2");
             }
         }
     }
@@ -157,8 +217,8 @@ public class BoardState {
             ArrayList<Piece> moves = legalMovesKingInCheck();
             if (moves.size() == 0) {
                 gameOver = true;
-                String winner = whiteToMove ? "Black" : "White";
-                System.out.println(winner + " is victorious!");
+                //String winner = whiteToMove ? "Black" : "White";
+                //System.out.println(winner + " is victorious!");
             }
         }
     }
@@ -275,10 +335,10 @@ public class BoardState {
                 }
             }
 
-            // 2. block the line of attack with a piece
+            // 2. block the line of attack with a piece other than the king
             if (piecesAttackingKing.size() == 1) {
                 for(Piece l:lineOfAttack){
-                    if(p.row==l.row && p.col==l.col){
+                    if(p.type!=PieceType.KING && p.row==l.row && p.col==l.col){
                         legalMoves.add(p);
                     }
                 }
@@ -404,6 +464,7 @@ public class BoardState {
             if(thePiece.type==PieceType.PAWN){
                 if(Math.abs(startPos[0]-endPos[0])==2){
                     this.enPassant=true;
+                    this.enPassantRow=endPos[0];
                     this.enPassantCol=endPos[1];
                 }
             }

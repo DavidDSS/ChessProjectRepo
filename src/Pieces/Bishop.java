@@ -8,6 +8,12 @@ public class Bishop extends Piece {
 
     // bishops are generally better than knights, hence the extra 5 points
     int value = this.white ? 35 : -35;
+    int[][] directions = {
+            {1, 1},
+            {-1, 1},
+            {1, -1},
+            {-1, -1},
+    };
 
     public Bishop(boolean color, int r, int c){
         super(color, r, c);
@@ -23,13 +29,6 @@ public class Bishop extends Piece {
 
         int pr=this.row;
         int pc=this.col;
-
-        int[][] directions = {
-                {1, 1},
-                {-1, 1},
-                {1, -1},
-                {-1, -1},
-        };
 
         for (int[] dir : directions) {
             //Check Upward Right Diagonal
@@ -74,11 +73,59 @@ public class Bishop extends Piece {
     @Override
     public int evaluatePiece(BoardState board) {
 
+        int eval = 0;
+        int pr = this.row;
+        int pc = this.col;
+        int minmax = this.white ? 1 : -1;
+
         // is the bishop on a long diagonal
         // how many squares is the bishop controlling
-        // is the bishop pointing towards the enemy king
-        // do we have the bishop pair
+        // is the bishop attacking/defending a piece
+        // points for check
+        for (int[] dir : directions) {
+            //Check Upward Right Diagonal
+            for(int i=1; i<8;i++){
+                //Check if move is in bounds
+                if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
+                // add point for possible move
+                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
+                    eval += minmax*1;
+                }
+                //If piece encounter add point
+                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
+                    eval += minmax*1;
+                    // attack puts king in check
+                    if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
+                        eval += minmax*2;
+                    }
+                }
+            }
+        }
 
-        return 0;
+        // is the bishop pointing towards the enemy king
+
+
+        // do we have the bishop pair
+        boolean bishopPair = true;
+        if (this.white && board.capturedPiecesWhite!=null) {
+            for (Piece p : board.capturedPiecesWhite) {
+                if (p != null && p.type == PieceType.BISHOP) {
+                    bishopPair = false;
+                }
+            }
+        }
+        else if (!this.white && board.capturedPiecesBlack!=null){
+            for (Piece p : board.capturedPiecesBlack) {
+                if (p != null && p.type == PieceType.BISHOP) {
+                    bishopPair = false;
+                }
+            }
+        }
+
+        if (bishopPair) {
+            eval += minmax*2;
+        }
+
+        return this.value + eval;
     }
 }

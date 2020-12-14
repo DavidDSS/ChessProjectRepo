@@ -75,15 +75,37 @@ public class Rook extends Piece{
         int eval = 0;
         int pr = this.row;
         int pc = this.col;
+        int minmax = this.white ? 1 : -1;
 
         // how many available squares the rook has to move
+        // is the rook attacking/defending a piece
+        // points for check
+        for (int[] dir : directions) {
+            for (int i = 1; i < 8; i++) {
+                //Check if move is in bounds
+                if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
+                // add point for possible move
+                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
+                    eval += minmax*1;
+                }
+                //If piece encounter add point
+                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
+                    eval += minmax*1;
+                    // attack puts king in check
+                    if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
+                        eval += minmax*2;
+                    }
+                }
+            }
+        }
 
-
-        // how many enemy pieces the rook is attacking
-
-
-
-        // is the rook on an enemy row
+        // "Pigs", rook has infiltrated enemy's 2nd row
+        if (this.white && this.row == 1) {
+            eval += minmax*2;
+        }
+        else if (!this.white && this.row == 6){
+            eval += minmax*2;
+        }
 
         return this.value + eval;
     }

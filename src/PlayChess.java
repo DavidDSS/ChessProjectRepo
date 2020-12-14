@@ -161,30 +161,5 @@ public class PlayChess {
         }
 
         System.out.println("Game over!");
-        // stalemate check
-        /*
-        board.userMove(convertNotation(new char[]{'e','2'}),convertNotation(new char[]{'e','3'}));
-        board.userMove(convertNotation(new char[]{'a','7'}),convertNotation(new char[]{'a','5'}));
-        board.userMove(convertNotation(new char[]{'d','1'}),convertNotation(new char[]{'h','5'}));
-        board.userMove(convertNotation(new char[]{'a','8'}),convertNotation(new char[]{'a','6'}));
-        board.userMove(convertNotation(new char[]{'h','5'}),convertNotation(new char[]{'a','5'}));
-        board.userMove(convertNotation(new char[]{'h','7'}),convertNotation(new char[]{'h','5'}));
-        board.userMove(convertNotation(new char[]{'h','2'}),convertNotation(new char[]{'h','4'}));
-        board.userMove(convertNotation(new char[]{'a','6'}),convertNotation(new char[]{'h','6'}));
-        board.userMove(convertNotation(new char[]{'a','5'}),convertNotation(new char[]{'c','7'}));
-        board.userMove(convertNotation(new char[]{'f','7'}),convertNotation(new char[]{'f','6'}));
-        board.userMove(convertNotation(new char[]{'c','7'}),convertNotation(new char[]{'d','7'}));
-        board.userMove(convertNotation(new char[]{'e','8'}),convertNotation(new char[]{'f','7'}));
-        board.userMove(convertNotation(new char[]{'d','7'}),convertNotation(new char[]{'b','7'}));
-        board.userMove(convertNotation(new char[]{'d','8'}),convertNotation(new char[]{'d','3'}));
-        board.userMove(convertNotation(new char[]{'b','7'}),convertNotation(new char[]{'b','8'}));
-        board.userMove(convertNotation(new char[]{'d','3'}),convertNotation(new char[]{'h','7'}));
-        board.userMove(convertNotation(new char[]{'b','8'}),convertNotation(new char[]{'c','8'}));
-        board.userMove(convertNotation(new char[]{'f','7'}),convertNotation(new char[]{'g','6'}));
-        board.userMove(convertNotation(new char[]{'c','8'}),convertNotation(new char[]{'e','6'}));
-
-        System.out.println(board.gameOver);
-
-         */
     }
 }

@@ -65,7 +65,7 @@ public class Knight extends Piece {
         // is the knight in a good central square
         // does the knight attack multiple pieces, if so which ones ?
         // can we develop this piece ?
-
-        return 0;
+        int eval = 0;
+        return this.value + eval;
     }
 }

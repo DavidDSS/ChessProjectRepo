@@ -72,18 +72,36 @@ public class Pawn extends Piece {
         if(board.whiteToMove){
             //Diagonal Left
             if(inBounds(pr-1,pc-1)) {
-                if (board.theBoard[pr - 1][pc - 1] != null && !board.theBoard[pr - 1][pc - 1].white || board.enPassant) {
+                // normal attack
+                if (board.theBoard[pr - 1][pc - 1] != null && !board.theBoard[pr - 1][pc - 1].white) {
                     Pawn pawn=new Pawn(this.white, pr - 1, pc - 1);
                     pawn.isAttacking=true;
                     moves.add(pawn);
                 }
+                // enPassant
+                else if (board.enPassant) {
+                    if (this.row == board.enPassantRow && this.col-1 == board.enPassantCol) {
+                        Pawn pawn=new Pawn(this.white, pr - 1, pc - 1);
+                        pawn.isAttacking=true;
+                        moves.add(pawn);
+                    }
+                }
             }
             //Diagonal Right
             if(inBounds(pr-1,pc+1)) {
-                if (board.theBoard[pr - 1][pc + 1] != null && !board.theBoard[pr - 1][pc + 1].white || board.enPassant) {
+                // normal attack
+                if (board.theBoard[pr - 1][pc + 1] != null && !board.theBoard[pr - 1][pc + 1].white) {
                     Pawn pawn=new Pawn(this.white, pr - 1, pc + 1);
                     pawn.isAttacking=true;
                     moves.add(pawn);
+                }
+                // enPassant
+                else if (board.enPassant) {
+                    if (this.row == board.enPassantRow && this.col+1 == board.enPassantCol) {
+                        Pawn pawn=new Pawn(this.white, pr - 1, pc + 1);
+                        pawn.isAttacking=true;
+                        moves.add(pawn);
+                    }
                 }
             }
         }
@@ -91,18 +109,34 @@ public class Pawn extends Piece {
         else{
             //Diagonal Left
             if(inBounds(pr+1,pc-1)) {
-                if (board.theBoard[pr + 1][pc - 1] != null && board.theBoard[pr + 1][pc - 1].white || board.enPassant) {
+                if (board.theBoard[pr + 1][pc - 1] != null && board.theBoard[pr + 1][pc - 1].white) {
                     Pawn pawn=new Pawn(this.white, pr + 1, pc - 1);
                     pawn.isAttacking=true;
                     moves.add(pawn);
                 }
+                // enPassant
+                else if (board.enPassant) {
+                    if (this.row == board.enPassantRow && this.col-1 == board.enPassantCol) {
+                        Pawn pawn=new Pawn(this.white, pr + 1, pc - 1);
+                        pawn.isAttacking=true;
+                        moves.add(pawn);
+                    }
+                }
             }
             //Diagonal Right
             if(inBounds(pr+1,pc+1)){
-                if(board.theBoard[pr+1][pc+1]!=null && board.theBoard[pr + 1][pc + 1].white || board.enPassant){
+                if(board.theBoard[pr+1][pc+1]!=null && board.theBoard[pr + 1][pc + 1].white){
                     Pawn pawn=new Pawn(this.white, pr + 1, pc + 1);
                     pawn.isAttacking=true;
                     moves.add(pawn);
+                }
+                // enPassant
+                else if (board.enPassant) {
+                    if (this.row == board.enPassantRow && this.col+1 == board.enPassantCol) {
+                        Pawn pawn=new Pawn(this.white, pr + 1, pc + 1);
+                        pawn.isAttacking=true;
+                        moves.add(pawn);
+                    }
                 }
             }
 
@@ -120,11 +154,11 @@ public class Pawn extends Piece {
         int pc = this.col;
 
         // how far has the pawn advanced
-        eval += minmax*(this.white ? 6 - pr : 1 - pr);
+        //eval += minmax*(this.white ? 6 - pr : 1 - pr);
 
         // is this a central pawn or flank pawn
         if (pc == 3 || pc == 4) {
-            eval += minmax*2;
+            eval += minmax*3;
         }
         else if (pc == 0 || pc == 7) {
             eval += minmax*1;
@@ -136,7 +170,7 @@ public class Pawn extends Piece {
             if (board.theBoard[pr+dir][pc-1] != null && (this.white == board.theBoard[pr+dir][pc-1].white)) {
                 eval += minmax*1;
                 if (board.theBoard[pr+dir][pc-1].type == PieceType.PAWN) {
-                    eval += minmax*2;
+                    eval += minmax*1;
                 }
             }
         }
@@ -145,7 +179,7 @@ public class Pawn extends Piece {
             if (board.theBoard[pr+dir][pc+1] != null && (this.white == board.theBoard[pr+dir][pc+1].white)) {
                 eval += minmax*1;
                 if (board.theBoard[pr+dir][pc+1].type == PieceType.PAWN) {
-                    eval += minmax*2;
+                    eval += minmax*1;
                 }
             }
         }

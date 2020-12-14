@@ -115,8 +115,8 @@ public class King extends Piece {
         // has the king castled yet
         // is the king safe in corner of the board
         // can the king attack a piece, how many pieces are on the board ?
-
-        return 0;
+        int eval = 0;
+        return this.value + eval;
     }
 
     public ArrayList<Piece> getMovesNotInCheck (BoardState board, ArrayList<Piece> moves) {

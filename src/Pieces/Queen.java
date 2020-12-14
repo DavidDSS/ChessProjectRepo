@@ -39,11 +39,12 @@ public class Queen extends Piece {
     @Override
     public int evaluatePiece(BoardState board) {
 
+
         // how many squares does the queen control
         // is the queen putting the king in check
         // is the queen on a good central square
         // is the queen pinning a piece
-
-        return 0;
+        int eval = 0;
+        return this.value + eval;
     }
 }
