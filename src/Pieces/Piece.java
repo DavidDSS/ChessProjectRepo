@@ -50,5 +50,5 @@ public abstract class Piece {
 
     public abstract ArrayList<Piece> getMoves(BoardState board);
 
-
+    public abstract int evaluatePiece(BoardState board);
 }

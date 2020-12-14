@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class Queen extends Piece {
 
+    int value = this.white ? 90 : -90;
+
     public Queen(boolean color, int r, int c){
         super(color, r, c);
         type=PieceType.QUEEN;
@@ -32,5 +34,16 @@ public class Queen extends Piece {
         }
 
         return moves;
+    }
+
+    @Override
+    public int evaluatePiece(BoardState board) {
+
+        // how many squares does the queen control
+        // is the queen putting the king in check
+        // is the queen on a good central square
+        // is the queen pinning a piece
+
+        return 0;
     }
 }

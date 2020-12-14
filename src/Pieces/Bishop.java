@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 public class Bishop extends Piece {
 
+    // bishops are generally better than knights, hence the extra 5 points
+    int value = this.white ? 35 : -35;
+
     public Bishop(boolean color, int r, int c){
         super(color, r, c);
         type=PieceType.BISHOP;
@@ -66,5 +69,16 @@ public class Bishop extends Piece {
         }
 
         return moves;
+    }
+
+    @Override
+    public int evaluatePiece(BoardState board) {
+
+        // is the bishop on a long diagonal
+        // how many squares is the bishop controlling
+        // is the bishop pointing towards the enemy king
+        // do we have the bishop pair
+
+        return 0;
     }
 }

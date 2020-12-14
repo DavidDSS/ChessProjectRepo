@@ -37,9 +37,31 @@ public class BoardState {
     }
 
     public double evaluatePosition () {
+        double eval = 0;
 
+        // evaluate one set of pieces
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                // only evaluate pieces of the same colour
+                if(theBoard[r][c]!=null && (whiteToMove==theBoard[r][c].white)) {
+                    // get the evaluation of the piece and add it to the total
+                    eval += theBoard[r][c].evaluatePiece(this);
+                }
+            }
+        }
 
-        return 0;
+        // evaluate the other set of pieces
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                // only evaluate pieces of the same colour
+                if(theBoard[r][c]!=null && (whiteToMove!=theBoard[r][c].white)) {
+                    // get the evaluation of the piece and add it to the total
+                    eval += theBoard[r][c].evaluatePiece(this);
+                }
+            }
+        }
+
+        return eval;
     }
 
     public void userMove(int[] startPos, int[] endPos){
@@ -128,6 +150,7 @@ public class BoardState {
             }
         }
     }
+
     public void checkCheckmate () {
 
         if (kingInCheck) {
@@ -440,9 +463,6 @@ public class BoardState {
 
             // check for stalemate
             checkStalemate();
-
-            // check to see if the game is over
-            this.printBoard();
 
         } // if the piece is not null i.e. legal move was attempted
 

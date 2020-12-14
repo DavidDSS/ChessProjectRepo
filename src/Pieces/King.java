@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public class King extends Piece {
 
     boolean[][] attackedByPiece = new boolean[8][8];
+    int value = this.white ? 900 : -900;
+    boolean hasCastled = false;
 
     public King(boolean color, int r, int c){
         super(color, r, c);
@@ -105,6 +107,16 @@ public class King extends Piece {
         }
 
         return moves;
+    }
+
+    @Override
+    public int evaluatePiece(BoardState board) {
+
+        // has the king castled yet
+        // is the king safe in corner of the board
+        // can the king attack a piece, how many pieces are on the board ?
+
+        return 0;
     }
 
     public ArrayList<Piece> getMovesNotInCheck (BoardState board, ArrayList<Piece> moves) {

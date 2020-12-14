@@ -150,7 +150,14 @@ public class PlayChess {
             else {
                 // make the move
                 board.userMove(theMove,endMove);
+                // print the board
+                board.printBoard();
             }
+
+            // let the engine make a move
+            board.engineMove();
+            // print the board
+            board.printBoard();
         }
 
         System.out.println("Game over!");

@@ -6,6 +6,14 @@ import java.util.ArrayList;
 
 public class Rook extends Piece{
 
+    int value = this.white ? 50 : -50;
+    int[][] directions = {
+            {1, 0},
+            {-1, 0},
+            {0, -1},
+            {0, 1},
+    };
+
     public Rook(boolean color, int r, int c){
         super(color, r, c);
         type=PieceType.ROOK;
@@ -18,15 +26,8 @@ public class Rook extends Piece{
     public ArrayList<Piece> getMoves(BoardState board) {
         moves.clear();
 
-        int pr=this.row;
-        int pc=this.col;
-
-        int[][] directions = {
-                {1, 0},
-                {-1, 0},
-                {0, -1},
-                {0, 1},
-        };
+        int pr = this.row;
+        int pc = this.col;
 
         //check possible moves for each direction up, down, left, right
         for (int[] dir : directions) {
@@ -66,5 +67,24 @@ public class Rook extends Piece{
         }
 
         return moves;
+    }
+
+    @Override
+    public int evaluatePiece(BoardState board) {
+
+        int eval = 0;
+        int pr = this.row;
+        int pc = this.col;
+
+        // how many available squares the rook has to move
+
+
+        // how many enemy pieces the rook is attacking
+
+
+
+        // is the rook on an enemy row
+
+        return this.value + eval;
     }
 }

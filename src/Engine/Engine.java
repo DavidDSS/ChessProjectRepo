@@ -19,19 +19,17 @@ public class Engine {
      */
     public Piece calculateBestMove () {
 
-        BoardState p = this.getPosition();
+        BoardState p = new BoardState(this.position.theBoard);
         double currEval = p.evaluation;
         double newEval;
         Piece bestMove = null;
 
         // get all possible moves for the player
-        // loop through all the moves setting chosen position based on max/minx
-        // return best position
         ArrayList<Piece> moves = position.getAllPossibleMoves();
 
         for (Piece m : moves) {
             // check the evaluation of the move
-            newEval = alphabeta(3, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, p);
+            newEval = alphabeta(1, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, p);
 
             // for white we want the maximum value
             if (position.whiteToMove) {
@@ -51,7 +49,6 @@ public class Engine {
         return bestMove;
 
     } // calculateBestMove
-
     private double alphabeta (int depth, double alpha, double beta, BoardState currPosition) {
 
         if (depth==0 || currPosition.gameOver) {
@@ -81,6 +78,7 @@ public class Engine {
             for (Piece m : moves) {
                 // make the move and set the new position
                 BoardState newPosition = new BoardState(currPosition.theBoard);
+                newPosition.whiteToMove = false;
                 newPosition.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
                 // continue recursive call
                 eval = alphabeta(depth-1, alpha, beta, newPosition);
