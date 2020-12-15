@@ -83,7 +83,7 @@ public class Bishop extends Piece {
 
         // points for piece development
         if (this.hasMoved) {
-            eval += minmax*10;
+            eval += minmax*5;
         }
 
         // is the bishop on a long diagonal
@@ -106,6 +106,7 @@ public class Bishop extends Piece {
                     if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
                         eval += minmax*2;
                     }
+                    break;
                 }
             }
         }

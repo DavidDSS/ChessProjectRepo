@@ -47,6 +47,10 @@ public class Queen extends Piece {
         // is the queen on a good central square
         // is the queen pinning a piece
         int eval = 0;
+
+
+
+
         return this.value + eval;
     }
 }

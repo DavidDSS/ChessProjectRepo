@@ -98,16 +98,9 @@ public class Rook extends Piece{
                     if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
                         eval += minmax*2;
                     }
+                    break;
                 }
             }
-        }
-
-        // "Pigs", rook has infiltrated enemy's 2nd row
-        if (this.white && this.row == 1) {
-            eval += minmax*2;
-        }
-        else if (!this.white && this.row == 6){
-            eval += minmax*2;
         }
 
         return this.value + eval;

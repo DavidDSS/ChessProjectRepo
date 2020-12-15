@@ -7,6 +7,16 @@ import java.util.ArrayList;
 public class Knight extends Piece {
 
     int value = this.white ? 30 : -30;
+    int[][] idealSquares = {
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 5, 0, 0},
+            {0, 5, 0, 5, 5, 0, 5, 0},
+            {0, 5, 0, 5, 5, 0, 5, 0},
+            {0, 0, 0, 0, 0, 5, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0}
+    };
 
     public Knight(boolean color, int r, int c, Piece p){
         super(color, r, c, p);
@@ -76,8 +86,12 @@ public class Knight extends Piece {
 
         // points for piece development
         if (this.hasMoved) {
-            eval += minmax*10;
+            eval += minmax*5;
         }
+
+        // points for the piece being on its most effective square
+        eval += minmax*idealSquares[this.row][this.col];
+
         return this.value + eval;
     }
 }

@@ -50,7 +50,7 @@ public class Engine {
             p.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
 
             // check the evaluation of the move
-            newEval = alphabeta(2, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, p);
+            newEval = alphabeta(1, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, p);
 
             // for white we want the maximum value
             if (position.whiteToMove) {
@@ -83,7 +83,7 @@ public class Engine {
 
         double eval;
         if (currPosition.whiteToMove) {
-            double maxEval = Double.NEGATIVE_INFINITY;
+            eval = Double.NEGATIVE_INFINITY;
             ArrayList<Piece> moves = currPosition.getAllPossibleMoves();
             for (Piece m : moves) {
                 // create a deep copy of the board state and pieces
@@ -91,15 +91,14 @@ public class Engine {
                 newPosition.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
                 // continue recursive call
                 eval = alphabeta(depth-1, alpha, beta, newPosition);
-                maxEval = Math.max(maxEval, eval);
                 alpha = Math.max(alpha, eval);
                 // pruning, disregard branch
                 if (beta <= alpha) break;
             }
-            return maxEval;
+            return eval;
         }
         else {
-            double minEval = Double.POSITIVE_INFINITY;
+            eval = Double.POSITIVE_INFINITY;
             ArrayList<Piece> moves = currPosition.getAllPossibleMoves();
             for (Piece m : moves) {
                 // create a deep copy of the board state and pieces
@@ -108,12 +107,11 @@ public class Engine {
                 newPosition.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
                 // continue recursive call
                 eval = alphabeta(depth-1, alpha, beta, newPosition);
-                minEval = Math.min(minEval, eval);
                 beta = Math.min(beta, eval);
                 // pruning, disregard branch
                 if (beta <= alpha) break;
             }
-            return minEval;
+            return eval;
         }
 
     } // alphabeta
