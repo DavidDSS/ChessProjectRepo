@@ -294,17 +294,16 @@ public class BoardState {
         if (attackingPiece.type == PieceType.BISHOP || attackingPiece.type == PieceType.QUEEN) {
             int incRow = rowDistance > 0 ? -1 : 1;
             int incCol = colDistance > 0 ? -1 : 1;
-            int destination = attackingPiece.row+incRow;
-            int i = 1;
-            while (destination != king.row) {
+            int kingDist = Math.abs(king.row-attackingPiece.row);
+
+            // add squares between the piece and the king
+            // all my homies hate while loops
+            for (int i = 1; i < kingDist; i++) {
                 if (attackingPiece.type == PieceType.BISHOP) {
-                    lineOfAttack.add(new Bishop(attackingPiece.white, attackingPiece.row+incRow*i, attackingPiece.col+incCol*i, attackingPiece));
+                    lineOfAttack.add(new Bishop(attackingPiece.white, attackingPiece.row+i*incRow, attackingPiece.col+i*incCol, attackingPiece));
+                } else {
+                    lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row+i*incRow, attackingPiece.col+i*incCol, attackingPiece));
                 }
-                else {
-                    lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row+incRow*i, attackingPiece.col+incCol*i, attackingPiece));
-                }
-                destination += incRow;
-                i++;
             }
         }
 

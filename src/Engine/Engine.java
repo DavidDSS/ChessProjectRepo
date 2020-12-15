@@ -4,12 +4,13 @@ import Board.BoardState;
 import Pieces.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
 public class Engine {
 
-    int depth = 2;
+    int depth = 3;
     Date date = new Date();
     private BoardState position;
 
@@ -53,12 +54,12 @@ public class Engine {
             // evaluate the move
             m.evaluation = p.evaluatePosition();
         }
+
         // sort moves by evaluation (min to max)
         moves.sort(Comparator.comparingDouble(Piece::getEvaluation));
-
-        if (moves.size() >= 3) {
-            // for efficiency only consider top 3 moves
-            moves = new ArrayList<>(moves.subList(0, 3));
+        // sort them max to min for white
+        if (position.whiteToMove) {
+            Collections.reverse(moves);
         }
 
         // some default move
@@ -125,20 +126,10 @@ public class Engine {
         }
         // sort moves by evaluation (min to max)
         moves.sort(Comparator.comparingDouble(Piece::getEvaluation));
-        // for efficiency only consider top 3 moves
+        // sort them max to min for white
         if (currPosition.whiteToMove) {
-            if (moves.size() >= 3) {
-                moves = new ArrayList<>(moves.subList(moves.size()-3, moves.size()));
-            }
+            Collections.reverse(moves);
         }
-        else {
-            if (moves.size() >= 3) {
-                moves = new ArrayList<>(moves.subList(0, 3));
-            }
-        }
-
-        // clean up
-        System.gc();
 
         double eval;
         if (currPosition.whiteToMove) {
