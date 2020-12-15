@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class King extends Piece {
 
     boolean[][] attackedByPiece = new boolean[8][8];
-    int value = this.white ? 900 : -900;
+    int value = this.white ? 9000 : -9000;
 
     public King(boolean color, int r, int c, Piece p){
         super(color, r, c, p);

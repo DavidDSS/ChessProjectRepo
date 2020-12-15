@@ -18,7 +18,8 @@ public class BoardState {
     public boolean whiteToMove = true;
     public boolean kingInCheck = false;
     public boolean enPassant = false;
-    public boolean gameOver = false;
+    public boolean checkmate = false;
+    public boolean stalemate = false;
     public boolean legalMove = true;
 
     public ArrayList<Piece> piecesAttackingKing = new ArrayList<>();
@@ -34,7 +35,8 @@ public class BoardState {
             this.enPassant = b.enPassant;
             this.enPassantRow = b.enPassantRow;
             this.enPassantCol = b.enPassantCol;
-            this.gameOver = b.gameOver;
+            this.checkmate = b.checkmate;
+            this.stalemate = b.stalemate;
             this.piecesAttackingKing = b.piecesAttackingKing;
             this.capturedPiecesBlack = b.capturedPiecesBlack;
             this.capturedPiecesWhite = b.capturedPiecesWhite;
@@ -92,7 +94,7 @@ public class BoardState {
             checkCheckmate();
         }
         else {
-            makeMove(new int[]{move.prevRow, move.prevCol}, new int[]{move.row, move.col});
+            makeMove(move.prevRow, move.prevCol, move.row, move.col);
         }
     }
 
@@ -121,24 +123,33 @@ public class BoardState {
             }
         }
 
+        if (this.checkmate) {
+            if (this.whiteToMove) {
+                eval -= 900;
+            }
+            else {
+                eval += 900;
+            }
+        }
+
         // set and return the evaluation
         this.evaluation = eval;
         return eval;
     }
 
-    public void userMove(int[] startPos, int[] endPos){
+    public void userMove(int startR, int startC, int endR, int endC){
 
         boolean legalMove=false;
 
         // user chose empty square
-        if(theBoard[startPos[0]][startPos[1]]==null){
+        if(theBoard[startR][startC]==null){
             System.out.println("That is an illegal move!");
             legalMove = false;
             return;
         }
 
         // the chosen piece
-        ArrayList<Piece> chosenPieceMoves = theBoard[startPos[0]][startPos[1]].getMoves(this);
+        ArrayList<Piece> chosenPieceMoves = theBoard[startR][startC].getMoves(this);
 
         // check if the king is in check, user has to react
         if (kingInCheck) {
@@ -158,7 +169,7 @@ public class BoardState {
         // check if the user entered valid end position
         else {
             for(Piece p : chosenPieceMoves){
-                if(p.row==endPos[0] && p.col==endPos[1]){
+                if(p.row==endR && p.col==endC){
                     legalMove=true;
                 }
             }
@@ -166,7 +177,7 @@ public class BoardState {
 
         // if the user move is legal, actually make the move
         if(legalMove) {
-            makeMove(startPos, endPos);
+            makeMove(startR, startC, endR, endC);
         }
         else{
             System.out.println("That is not a legal move!");
@@ -208,7 +219,7 @@ public class BoardState {
         if(!otherThanKing) {
             moves = legalMovesKingInCheck();
             if (moves.size() == 0) {
-                gameOver = true;
+                stalemate = true;
                 //System.out.println("Stalemate: 1/2 - 1/2");
             }
         }
@@ -219,7 +230,7 @@ public class BoardState {
         if (kingInCheck) {
             ArrayList<Piece> moves = legalMovesKingInCheck();
             if (moves.size() == 0) {
-                gameOver = true;
+                checkmate = true;
                 //String winner = whiteToMove ? "Black" : "White";
                 //System.out.println(winner + " is victorious!");
             }
@@ -366,28 +377,28 @@ public class BoardState {
         return legalMoves;
     }
 
-    public void makeMove(int[] startPos, int[] endPos){
+    public void makeMove(int startR, int startC, int endR, int endC){
 
         piecesAttackingKing.clear();
         kingInCheck = false;
 
         //If white to move and black piece chosen return
-        if(this.whiteToMove && !this.theBoard[startPos[0]][startPos[1]].white) {
+        if(this.whiteToMove && !this.theBoard[startR][startC].white) {
             return;
         }
         //If black to move and white piece chosen return
-        if(!this.whiteToMove && this.theBoard[startPos[0]][startPos[1]].white) {
+        if(!this.whiteToMove && this.theBoard[startR][startC].white) {
             return;
         }
 
         // get the piece we are trying to move
-        Piece thePiece = theBoard[startPos[0]][startPos[1]];
+        Piece thePiece = theBoard[startR][startC];
 
         if(thePiece!=null){
             // check for castling move
             if (thePiece.type==PieceType.KING) {
                 // king side castles
-                if ((endPos[1]-startPos[1])==2) {
+                if ((endC-startC)==2) {
                     // we account for the king moving later
                     if (whiteToMove) {
                         // only move the rook
@@ -410,7 +421,7 @@ public class BoardState {
                 }
 
                 // queen side castles
-                if ((endPos[1]-startPos[1])==-2) {
+                if ((endC-startC)==-2) {
                     // we account for the king moving later
                     if (whiteToMove) {
                         // only move the rook
@@ -436,27 +447,27 @@ public class BoardState {
             // check for enpassant attack and promotion
             if(thePiece.type==PieceType.PAWN){
                 // check if move is left or right (enpassant)
-                if(Math.abs(endPos[1]-startPos[1])==1){
-                    if(enPassantCol==endPos[1]){
+                if(Math.abs(endC-startC)==1){
+                    if(enPassantCol==endC){
                         if(this.whiteToMove){
-                            capturedPiecesBlack.add(theBoard[endPos[0]+1][endPos[1]]);
-                            theBoard[endPos[0]+1][endPos[1]]=null;
+                            capturedPiecesBlack.add(theBoard[endR+1][endC]);
+                            theBoard[endR+1][endC]=null;
                         }
                         else{
-                            capturedPiecesWhite.add(theBoard[endPos[0]-1][endPos[1]]);
-                            theBoard[endPos[0]-1][endPos[1]]=null;
+                            capturedPiecesWhite.add(theBoard[endR-1][endC]);
+                            theBoard[endR-1][endC]=null;
                         }
                     }
                 }
 
                 // promote the pawn at the end of the board
-                if (endPos[0]==0 && whiteToMove) {
+                if (endR==0 && whiteToMove) {
                     Pawn pawn = (Pawn) thePiece;
-                    thePiece = pawn.promote(whiteToMove, endPos[0], endPos[1], 0);
+                    thePiece = pawn.promote(whiteToMove, endR, endC, 0);
                 }
-                else if (endPos[0]==7 && !whiteToMove) {
+                else if (endR==7 && !whiteToMove) {
                     Pawn pawn = (Pawn) thePiece;
-                    thePiece = pawn.promote(whiteToMove, endPos[0], endPos[1], 0);
+                    thePiece = pawn.promote(whiteToMove, endR, endC, 0);
                 }
             } // en passant check
 
@@ -465,43 +476,43 @@ public class BoardState {
 
             // check if a pawn has moved twice to set en passant flag
             if(thePiece.type==PieceType.PAWN){
-                if(Math.abs(startPos[0]-endPos[0])==2){
+                if(Math.abs(startR-endR)==2){
                     this.enPassant=true;
-                    this.enPassantRow=endPos[0];
-                    this.enPassantCol=endPos[1];
+                    this.enPassantRow=endR;
+                    this.enPassantCol=endC;
                 }
             }
 
             // if we are capturing a piece, add the captured piece to respective list
-            if (theBoard[endPos[0]][endPos[1]] != null) {
+            if (theBoard[endR][endC] != null) {
                 if (this.whiteToMove) {
-                    capturedPiecesBlack.add(theBoard[endPos[0]][endPos[1]]);
+                    capturedPiecesBlack.add(theBoard[endR][endC]);
                 }
                 else {
-                    capturedPiecesWhite.add(theBoard[endPos[0]][endPos[1]]);
+                    capturedPiecesWhite.add(theBoard[endR][endC]);
                 }
             }
 
             // place the piece in the end position on the board
-            theBoard[endPos[0]][endPos[1]]=thePiece;
+            theBoard[endR][endC]=thePiece;
             // update the objects location on the board
-            thePiece.row = endPos[0];
-            thePiece.col = endPos[1];
+            thePiece.row = endR;
+            thePiece.col = endC;
 
             // get possible moves of the piece we moved
-            ArrayList<Piece> moves = theBoard[endPos[0]][endPos[1]].getMoves(this);
+            ArrayList<Piece> moves = theBoard[endR][endC].getMoves(this);
             // check if the piece we moved has put the king in check
             for(Piece p : moves){
                 if(theBoard[p.row][p.col]!=null && theBoard[p.row][p.col].type==PieceType.KING){
                     kingInCheck=true;
-                    piecesAttackingKing.add(theBoard[endPos[0]][endPos[1]]);
+                    piecesAttackingKing.add(theBoard[endR][endC]);
                 }
             }
             // check for a double check, other pieces attacking the king
             for (int r=0; r<8; r++) {
                 for (int c=0; c<8; c++) {
                     // not the same piece
-                    if(theBoard[r][c]!=null && theBoard[r][c].white==whiteToMove && r!=endPos[0] && c!=endPos[1] && r!=startPos[0] && c!=startPos[1]) {
+                    if(theBoard[r][c]!=null && theBoard[r][c].white==whiteToMove && r!=endR && c!=endC && r!=startR && c!=startC) {
                         moves = theBoard[r][c].getMoves(this);
                         for (Piece p : moves) {
                             if (theBoard[p.row][p.col]!=null && theBoard[p.row][p.col].type==PieceType.KING) {
@@ -514,10 +525,10 @@ public class BoardState {
             }
 
             // set the piece's previous position to null
-            theBoard[startPos[0]][startPos[1]]=null;
+            theBoard[startR][startC]=null;
 
             // set flag so we know the piece has moved
-            theBoard[endPos[0]][endPos[1]].hasMoved=true;
+            theBoard[endR][endC].hasMoved=true;
 
             // change turn
             this.whiteToMove = !this.whiteToMove;

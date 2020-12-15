@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Queen extends Piece {
 
-    int value = this.white ? 90 : -90;
+    int value = this.white ? 900 : -900;
 
     public Queen(boolean color, int r, int c, Piece p){
         super(color, r, c, p);

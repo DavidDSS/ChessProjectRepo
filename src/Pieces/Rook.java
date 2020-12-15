@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Rook extends Piece{
 
-    int value = this.white ? 50 : -50;
+    int value = this.white ? 500 : -500;
     int[][] directions = {
             {1, 0},
             {-1, 0},

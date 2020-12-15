@@ -36,7 +36,7 @@ public class PlayChess {
 
     public static void main(String[] args){
 
-        BoardState board=null;
+        BoardState board;
 
         Scanner gameMode= new Scanner(System.in);
         System.out.println("Press 0 to use Classic Board \nPress 1 to use Custom Board (Testing)");
@@ -123,7 +123,7 @@ public class PlayChess {
 
         }
 
-        while(!board.gameOver){
+        while(!board.checkmate || !board.stalemate){
             // take user input for move
             Scanner playerMove= new Scanner(System.in);
             System.out.print("Position of piece you want to move: ");
@@ -149,7 +149,7 @@ public class PlayChess {
             }
             else {
                 // make the move
-                board.userMove(theMove,endMove);
+                board.userMove(theMove[0], theMove[1], endMove[0], endMove[1]);
                 // print the board
                 board.printBoard();
                 // check if move went through
@@ -163,7 +163,6 @@ public class PlayChess {
                 else {
                     board.legalMove = true;
                 }
-
             }
 
 

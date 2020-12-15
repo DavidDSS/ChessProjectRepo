@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Pawn extends Piece {
 
     boolean isAttacking=false;
-    int value = this.white ? 10 : -10;
+    int value = this.white ? 100 : -100;
     int[][] idealSquares = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0},

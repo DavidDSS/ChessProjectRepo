@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Knight extends Piece {
 
-    int value = this.white ? 30 : -30;
+    int value = this.white ? 300 : -300;
     int[][] idealSquares = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0},

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Bishop extends Piece {
 
     // bishops are generally better than knights, hence the extra 5 points
-    int value = this.white ? 35 : -35;
+    int value = this.white ? 350 : -350;
     int[][] directions = {
             {1, 1},
             {-1, 1},

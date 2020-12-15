@@ -5,11 +5,13 @@ import Pieces.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 
 public class Engine {
 
+    int depth = 2;
+    Date date = new Date();
     private BoardState position;
-    private ArrayList<BoardState> initialMoves = new ArrayList<>();
 
     public Engine (BoardState p) {
 
@@ -47,26 +49,33 @@ public class Engine {
         for (Piece m : moves) {
             BoardState p = new BoardState(this.position);
             // make the move
-            p.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
+            p.makeMove(m.prevRow, m.prevCol, m.row, m.col);
             // evaluate the move
             m.evaluation = p.evaluatePosition();
         }
         // sort moves by evaluation (min to max)
         moves.sort(Comparator.comparingDouble(Piece::getEvaluation));
 
-        // for efficiency only consider top 3 moves
-        moves = new ArrayList<>(moves.subList(0, 3));
+        if (moves.size() >= 3) {
+            // for efficiency only consider top 3 moves
+            moves = new ArrayList<>(moves.subList(0, 3));
+        }
 
         // some default move
         bestMove = moves.get(0);
+
+        // get time before starting search
+        long startTime = date.getTime();
 
         // compare the moves
         for (Piece m : moves) {
             BoardState p = new BoardState(this.position);
             // make the move
-            p.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
+            p.makeMove(m.prevRow, m.prevCol, m.row, m.col);
             // check the evaluation of the move
-            newEval = alphabeta(2, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, p);
+            // fix me
+            // lost in the sauce on first call
+            newEval = alphabeta(depth, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, p);
             // for white we want the maximum value
             if (position.whiteToMove) {
                 if (currEval <= newEval) {
@@ -81,6 +90,10 @@ public class Engine {
                     bestMove = m;
                 }
             }
+            // set a search time limit
+            if (date.getTime() - startTime > 5000) {
+                break;
+            }
         }
 
         // return the best move in the position
@@ -90,7 +103,11 @@ public class Engine {
 
     private double alphabeta (int depth, double alpha, double beta, BoardState currPosition) {
 
-        if (depth==0 || currPosition.gameOver) {
+        // base cases
+        // out of memory
+        // depth
+        // checkmate or stalemate
+        if (depth==0 || currPosition.checkmate || currPosition.stalemate) {
             // max depth reach or game over
             // send back evaluation of the position
             return currPosition.evaluatePosition();
@@ -102,7 +119,7 @@ public class Engine {
         for (Piece m : moves) {
             BoardState p = new BoardState(currPosition);
             // make the move
-            p.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
+            p.makeMove(m.prevRow, m.prevCol, m.row, m.col);
             // evaluate the move
             m.evaluation = p.evaluatePosition();
         }
@@ -110,41 +127,50 @@ public class Engine {
         moves.sort(Comparator.comparingDouble(Piece::getEvaluation));
         // for efficiency only consider top 3 moves
         if (currPosition.whiteToMove) {
-            moves = new ArrayList<>(moves.subList(moves.size()-3, moves.size()));
+            if (moves.size() >= 3) {
+                moves = new ArrayList<>(moves.subList(moves.size()-3, moves.size()));
+            }
         }
         else {
-            moves = new ArrayList<>(moves.subList(0, 3));
+            if (moves.size() >= 3) {
+                moves = new ArrayList<>(moves.subList(0, 3));
+            }
         }
+
+        // clean up
+        System.gc();
 
         double eval;
         if (currPosition.whiteToMove) {
-            eval = Double.NEGATIVE_INFINITY;
+            double maxEval = Double.NEGATIVE_INFINITY;
             for (Piece m : moves) {
                 // create a deep copy of the board state and pieces
                 BoardState newPosition = new BoardState(currPosition);
-                newPosition.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
+                newPosition.makeMove(m.prevRow, m.prevCol, m.row, m.col);
                 // continue recursive call
                 eval = alphabeta(depth-1, alpha, beta, newPosition);
-                alpha = Math.max(alpha, eval);
+                maxEval = Math.max(maxEval, eval);
+                alpha = Math.max(alpha, maxEval);
                 // pruning, disregard branch
                 if (beta <= alpha) break;
             }
-            return eval;
+            return maxEval;
         }
         else {
-            eval = Double.POSITIVE_INFINITY;
+            double minEval = Double.POSITIVE_INFINITY;
             for (Piece m : moves) {
                 // create a deep copy of the board state and pieces
                 BoardState newPosition = new BoardState(currPosition);
                 // make the move and set the new position
-                newPosition.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
+                newPosition.makeMove(m.prevRow, m.prevCol, m.row, m.col);
                 // continue recursive call
                 eval = alphabeta(depth-1, alpha, beta, newPosition);
-                beta = Math.min(beta, eval);
+                minEval = Math.min(minEval, eval);
+                beta = Math.min(beta, minEval);
                 // pruning, disregard branch
                 if (beta <= alpha) break;
             }
-            return eval;
+            return minEval;
         }
 
     } // alphabeta
