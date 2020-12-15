@@ -8,11 +8,15 @@ public class Knight extends Piece {
 
     int value = this.white ? 30 : -30;
 
-    public Knight(boolean color, int r, int c){
-        super(color, r, c);
-        type=PieceType.KNIGHT;
-        this.pieceLetter=color?'n':'N';
-        moves= new ArrayList<>();
+    public Knight(boolean color, int r, int c, Piece p){
+        super(color, r, c, p);
+        if (p != null) {
+            this.makeCopy(p);
+        }
+        else {
+            type = PieceType.KNIGHT;
+            this.pieceLetter = color ? 'n' : 'N';
+        }
     }
 
     @Override
@@ -37,18 +41,18 @@ public class Knight extends Piece {
         for(int[] j:jumps){
             if(inBounds(pr+j[0], pc+j[1])) {
                 if (board.theBoard[pr + j[0]][pc + j[1]] == null) {
-                    moves.add(new Knight(this.white, pr + j[0], pc + j[1]));
+                    moves.add(new Knight(this.white, pr + j[0], pc + j[1], this));
                 }
                 else{
                     //If the knight is trying to attack check piece color
                     if(board.whiteToMove) {
                         if (!board.theBoard[pr + j[0]][pc + j[1]].white){
-                            moves.add(new Knight(this.white, pr + j[0], pc + j[1]));
+                            moves.add(new Knight(this.white, pr + j[0], pc + j[1], this));
                         }
                     }
                     else{
                         if (board.theBoard[pr + j[0]][pc + j[1]].white){
-                            moves.add(new Knight(this.white, pr + j[0], pc + j[1]));
+                            moves.add(new Knight(this.white, pr + j[0], pc + j[1], this));
                         }
                     }
                 }

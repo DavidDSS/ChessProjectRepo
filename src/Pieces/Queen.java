@@ -8,29 +8,31 @@ public class Queen extends Piece {
 
     int value = this.white ? 90 : -90;
 
-    public Queen(boolean color, int r, int c){
-        super(color, r, c);
-        type=PieceType.QUEEN;
-        this.pieceLetter=color?'q':'Q';
-        moves= new ArrayList<>();
+    public Queen(boolean color, int r, int c, Piece p){
+        super(color, r, c, p);
+        if (p != null) {
+            this.makeCopy(p);
+        }
+        else {
+            type=PieceType.QUEEN;
+            this.pieceLetter=color?'q':'Q';
+        }
     }
 
     @Override
     public ArrayList<Piece> getMoves(BoardState board) {
         moves.clear();
 
-        Piece rook= new Rook(this.white, this.row, this.col);
-        ArrayList<Piece> rookMoves=rook.getMoves(board);
+        Piece rook = new Rook(this.white, this.row, this.col, null);
+        ArrayList<Piece> rookMoves = rook.getMoves(board);
         for(Piece p : rookMoves){
-            moves.add(new Queen(p.white, p.row, p.col));
-
+            moves.add(new Queen(p.white, p.row, p.col, this));
         }
 
-        Piece bishop= new Bishop(this.white, this.row, this.col);
-        ArrayList<Piece> bishopMoves=bishop.getMoves(board);
+        Piece bishop= new Bishop(this.white, this.row, this.col, null);
+        ArrayList<Piece> bishopMoves = bishop.getMoves(board);
         for(Piece p : bishopMoves){
-            moves.add(new Queen(p.white, p.row, p.col));
-
+            moves.add(new Queen(p.white, p.row, p.col, this));
         }
 
         return moves;

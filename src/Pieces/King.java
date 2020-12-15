@@ -8,13 +8,16 @@ public class King extends Piece {
 
     boolean[][] attackedByPiece = new boolean[8][8];
     int value = this.white ? 900 : -900;
-    boolean hasCastled = false;
 
-    public King(boolean color, int r, int c){
-        super(color, r, c);
-        type=PieceType.KING;
-        this.pieceLetter=color?'k':'K';
-        moves= new ArrayList<>();
+    public King(boolean color, int r, int c, Piece p){
+        super(color, r, c, p);
+        if (p != null) {
+            this.makeCopy(p);
+        }
+        else {
+            type=PieceType.KING;
+            this.pieceLetter=color?'k':'K';
+        }
     }
 
     @Override
@@ -39,18 +42,18 @@ public class King extends Piece {
         for(int[] s:spaces){
             if(inBounds(pr+s[0], pc+s[1])) {
                 if (board.theBoard[pr + s[0]][pc + s[1]] == null) {
-                    moves.add(new King(this.white, pr + s[0], pc + s[1]));
+                    moves.add(new King(this.white, pr + s[0], pc + s[1], this));
                 }
                 else{
                     //If the king is trying to attack check piece color
                     if(board.whiteToMove) {
                         if (!board.theBoard[pr + s[0]][pc + s[1]].white){
-                            moves.add(new King(this.white, pr + s[0], pc + s[1]));
+                            moves.add(new King(this.white, pr + s[0], pc + s[1], this));
                         }
                     }
                     else{
                         if (board.theBoard[pr + s[0]][pc + s[1]].white){
-                            moves.add(new King(this.white, pr + s[0], pc + s[1]));
+                            moves.add(new King(this.white, pr + s[0], pc + s[1], this));
                         }
                     }
                 }
@@ -96,10 +99,10 @@ public class King extends Piece {
                 }
             }
             if (kingSideCastle) {
-                moves.add(new King(this.white, pr, pc + 2));
+                moves.add(new King(this.white, pr, pc + 2, this));
             }
             if (queenSideCastle) {
-                moves.add(new King(this.white, pr, pc - 2));
+                moves.add(new King(this.white, pr, pc - 2, this));
             }
 
             // double check moves to make sure king does not walk into check

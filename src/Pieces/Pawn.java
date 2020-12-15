@@ -9,11 +9,15 @@ public class Pawn extends Piece {
     boolean isAttacking=false;
     int value = this.white ? 10 : -10;
 
-    public Pawn(boolean color, int r, int c){
-        super(color, r, c);
-        this.pieceLetter=color?'p':'P';
-        type=PieceType.PAWN;
-        moves= new ArrayList<>();
+    public Pawn(boolean color, int r, int c, Piece p){
+        super(color, r, c, p);
+        if (p != null) {
+            this.makeCopy(p);
+        }
+        else {
+            this.pieceLetter=color?'p':'P';
+            type=PieceType.PAWN;
+        }
 
     }
 
@@ -22,19 +26,29 @@ public class Pawn extends Piece {
 
         switch (choice) {
             case 0:
-                promotedPiece = new Queen(color, r, c);
+                promotedPiece = new Queen(color, r, c, this);
+                promotedPiece.type = PieceType.QUEEN;
+                promotedPiece.pieceLetter = this.white ? 'q' : 'Q';
                 break;
             case 1:
-                promotedPiece = new Rook(color, r, c);
+                promotedPiece = new Rook(color, r, c, this);
+                promotedPiece.type = PieceType.ROOK;
+                promotedPiece.pieceLetter = this.white ? 'r' : 'R';
                 break;
             case 2:
-                promotedPiece = new Knight(color, r, c);
+                promotedPiece = new Knight(color, r, c, this);
+                promotedPiece.type = PieceType.KNIGHT;
+                promotedPiece.pieceLetter = this.white ? 'n' : 'N';
                 break;
             case 3:
-                promotedPiece = new Bishop(color, r, c);
+                promotedPiece = new Bishop(color, r, c, this);
+                promotedPiece.type = PieceType.BISHOP;
+                promotedPiece.pieceLetter = this.white ? 'b' : 'B';
                 break;
             default:
-                promotedPiece = new Queen(color, r, c);
+                promotedPiece = new Queen(color, r, c, this);
+                promotedPiece.type = PieceType.QUEEN;
+                promotedPiece.pieceLetter = this.white ? 'q' : 'Q';
                 break;
         }
 
@@ -51,9 +65,9 @@ public class Pawn extends Piece {
         //White
         if(board.whiteToMove){
             if(inBounds(pr-1,pc) && board.theBoard[pr-1][pc]==null){
-                moves.add(new Pawn(this.white, pr-1, pc));
+                moves.add(new Pawn(this.white, pr-1, pc, this));
                 if(inBounds(pr-2,pc) && this.hasMoved==false && board.theBoard[pr-2][pc]==null){
-                    moves.add(new Pawn(this.white, pr-2, pc));
+                    moves.add(new Pawn(this.white, pr-2, pc, this));
                 }
             }
 
@@ -61,9 +75,9 @@ public class Pawn extends Piece {
         //Black
         else{
             if(inBounds(pr+1,pc) && board.theBoard[pr+1][pc]==null){
-                moves.add(new Pawn(this.white, pr+1, pc));
+                moves.add(new Pawn(this.white, pr+1, pc, this));
                 if(inBounds(pr+2,pc) && this.hasMoved==false && board.theBoard[pr+2][pc]==null){
-                    moves.add(new Pawn(this.white, pr+2, pc));
+                    moves.add(new Pawn(this.white, pr+2, pc, this));
                 }
             }
         }
@@ -74,14 +88,14 @@ public class Pawn extends Piece {
             if(inBounds(pr-1,pc-1)) {
                 // normal attack
                 if (board.theBoard[pr - 1][pc - 1] != null && !board.theBoard[pr - 1][pc - 1].white) {
-                    Pawn pawn=new Pawn(this.white, pr - 1, pc - 1);
+                    Pawn pawn=new Pawn(this.white, pr - 1, pc - 1, this);
                     pawn.isAttacking=true;
                     moves.add(pawn);
                 }
                 // enPassant
                 else if (board.enPassant) {
                     if (this.row == board.enPassantRow && this.col-1 == board.enPassantCol) {
-                        Pawn pawn=new Pawn(this.white, pr - 1, pc - 1);
+                        Pawn pawn=new Pawn(this.white, pr - 1, pc - 1, this);
                         pawn.isAttacking=true;
                         moves.add(pawn);
                     }
@@ -91,14 +105,14 @@ public class Pawn extends Piece {
             if(inBounds(pr-1,pc+1)) {
                 // normal attack
                 if (board.theBoard[pr - 1][pc + 1] != null && !board.theBoard[pr - 1][pc + 1].white) {
-                    Pawn pawn=new Pawn(this.white, pr - 1, pc + 1);
+                    Pawn pawn=new Pawn(this.white, pr - 1, pc + 1, this);
                     pawn.isAttacking=true;
                     moves.add(pawn);
                 }
                 // enPassant
                 else if (board.enPassant) {
                     if (this.row == board.enPassantRow && this.col+1 == board.enPassantCol) {
-                        Pawn pawn=new Pawn(this.white, pr - 1, pc + 1);
+                        Pawn pawn=new Pawn(this.white, pr - 1, pc + 1, this);
                         pawn.isAttacking=true;
                         moves.add(pawn);
                     }
@@ -110,14 +124,14 @@ public class Pawn extends Piece {
             //Diagonal Left
             if(inBounds(pr+1,pc-1)) {
                 if (board.theBoard[pr + 1][pc - 1] != null && board.theBoard[pr + 1][pc - 1].white) {
-                    Pawn pawn=new Pawn(this.white, pr + 1, pc - 1);
+                    Pawn pawn=new Pawn(this.white, pr + 1, pc - 1, this);
                     pawn.isAttacking=true;
                     moves.add(pawn);
                 }
                 // enPassant
                 else if (board.enPassant) {
                     if (this.row == board.enPassantRow && this.col-1 == board.enPassantCol) {
-                        Pawn pawn=new Pawn(this.white, pr + 1, pc - 1);
+                        Pawn pawn=new Pawn(this.white, pr + 1, pc - 1, this);
                         pawn.isAttacking=true;
                         moves.add(pawn);
                     }
@@ -126,14 +140,14 @@ public class Pawn extends Piece {
             //Diagonal Right
             if(inBounds(pr+1,pc+1)){
                 if(board.theBoard[pr+1][pc+1]!=null && board.theBoard[pr + 1][pc + 1].white){
-                    Pawn pawn=new Pawn(this.white, pr + 1, pc + 1);
+                    Pawn pawn=new Pawn(this.white, pr + 1, pc + 1, this);
                     pawn.isAttacking=true;
                     moves.add(pawn);
                 }
                 // enPassant
                 else if (board.enPassant) {
                     if (this.row == board.enPassantRow && this.col+1 == board.enPassantCol) {
-                        Pawn pawn=new Pawn(this.white, pr + 1, pc + 1);
+                        Pawn pawn=new Pawn(this.white, pr + 1, pc + 1, this);
                         pawn.isAttacking=true;
                         moves.add(pawn);
                     }

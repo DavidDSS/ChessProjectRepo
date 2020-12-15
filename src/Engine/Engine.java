@@ -113,37 +113,4 @@ public class Engine {
 
     } // alphabeta
 
-    public Piece[][] createDeepCopy (Piece[][] board) {
-
-        Piece[][] copy = new Piece[8][8];
-        // make deep copy of pieces
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-
-                if (board[r][c] != null) {
-                    if (board[r][c].type == PieceType.PAWN) {
-                        copy[r][c] = new Pawn(board[r][c].white, board[r][c].row, board[r][c].col);
-                    }
-                    else if (board[r][c].type == PieceType.KING) {
-                        copy[r][c] = new King(board[r][c].white, board[r][c].row, board[r][c].col);
-                    }
-                    else if (board[r][c].type == PieceType.QUEEN) {
-                        copy[r][c] = new Queen(board[r][c].white, board[r][c].row, board[r][c].col);
-                    }
-                    else if (board[r][c].type == PieceType.KNIGHT) {
-                        copy[r][c] = new Knight(board[r][c].white, board[r][c].row, board[r][c].col);
-                    }
-                    else if (board[r][c].type == PieceType.BISHOP) {
-                        copy[r][c] = new Bishop(board[r][c].white, board[r][c].row, board[r][c].col);
-                    }
-                    else if (board[r][c].type == PieceType.ROOK) {
-                        copy[r][c] = new Rook(board[r][c].white, board[r][c].row, board[r][c].col);
-                    }
-                }
-            }
-        }
-
-        return copy;
-    } // createDeepCopy
-
 } // Engine

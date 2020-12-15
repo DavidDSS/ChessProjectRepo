@@ -55,22 +55,22 @@ public class BoardState {
 
                 if (board[r][c] != null) {
                     if (board[r][c].type == PieceType.PAWN) {
-                        copy[r][c] = new Pawn(board[r][c].white, board[r][c].row, board[r][c].col);
+                        copy[r][c] = new Pawn(board[r][c].white, board[r][c].row, board[r][c].col, board[r][c]);
                     }
                     else if (board[r][c].type == PieceType.KING) {
-                        copy[r][c] = new King(board[r][c].white, board[r][c].row, board[r][c].col);
+                        copy[r][c] = new King(board[r][c].white, board[r][c].row, board[r][c].col, board[r][c]);
                     }
                     else if (board[r][c].type == PieceType.QUEEN) {
-                        copy[r][c] = new Queen(board[r][c].white, board[r][c].row, board[r][c].col);
+                        copy[r][c] = new Queen(board[r][c].white, board[r][c].row, board[r][c].col, board[r][c]);
                     }
                     else if (board[r][c].type == PieceType.KNIGHT) {
-                        copy[r][c] = new Knight(board[r][c].white, board[r][c].row, board[r][c].col);
+                        copy[r][c] = new Knight(board[r][c].white, board[r][c].row, board[r][c].col, board[r][c]);
                     }
                     else if (board[r][c].type == PieceType.BISHOP) {
-                        copy[r][c] = new Bishop(board[r][c].white, board[r][c].row, board[r][c].col);
+                        copy[r][c] = new Bishop(board[r][c].white, board[r][c].row, board[r][c].col, board[r][c]);
                     }
                     else if (board[r][c].type == PieceType.ROOK) {
-                        copy[r][c] = new Rook(board[r][c].white, board[r][c].row, board[r][c].col);
+                        copy[r][c] = new Rook(board[r][c].white, board[r][c].row, board[r][c].col, board[r][c]);
                     }
                 }
             }
@@ -259,9 +259,9 @@ public class BoardState {
                 int inc = rowDistance > 0 ? -1 : 1;
                 for (int i = attackingPiece.row; i < king.row; i += inc) {
                     if (attackingPiece.type == PieceType.ROOK) {
-                        lineOfAttack.add(new Rook(attackingPiece.white, i, attackingPiece.col));
+                        lineOfAttack.add(new Rook(attackingPiece.white, i, attackingPiece.col, attackingPiece));
                     } else {
-                        lineOfAttack.add(new Queen(attackingPiece.white, i, attackingPiece.col));
+                        lineOfAttack.add(new Queen(attackingPiece.white, i, attackingPiece.col, attackingPiece));
                     }
                 }
             }
@@ -269,9 +269,9 @@ public class BoardState {
                 int inc = colDistance > 0 ? -1 : 1;
                 for (int i = attackingPiece.col; i < king.col; i += inc) {
                     if (attackingPiece.type == PieceType.ROOK) {
-                        lineOfAttack.add(new Rook(attackingPiece.white, attackingPiece.row, i));
+                        lineOfAttack.add(new Rook(attackingPiece.white, attackingPiece.row, i, attackingPiece));
                     } else {
-                        lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row, i));
+                        lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row, i, attackingPiece));
                     }
                 }
             }
@@ -284,10 +284,10 @@ public class BoardState {
             int i = 1;
             while (destination != king.row) {
                 if (attackingPiece.type == PieceType.BISHOP) {
-                    lineOfAttack.add(new Bishop(attackingPiece.white, attackingPiece.row+incRow*i, attackingPiece.col+incCol*i));
+                    lineOfAttack.add(new Bishop(attackingPiece.white, attackingPiece.row+incRow*i, attackingPiece.col+incCol*i, attackingPiece));
                 }
                 else {
-                    lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row+incRow*i, attackingPiece.col+incCol*i));
+                    lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row+incRow*i, attackingPiece.col+incCol*i, attackingPiece));
                 }
                 destination += incRow;
                 i++;
@@ -388,7 +388,7 @@ public class BoardState {
                     // we account for the king moving later
                     if (whiteToMove) {
                         // only move the rook
-                        theBoard[7][5] = new Rook(true, 7, 5);
+                        theBoard[7][5] = new Rook(true, 7, 5, theBoard[7][7]);
                         theBoard[7][5].hasMoved = true;
                         theBoard[7][7] = null;
                         // update the objects location on the board
@@ -397,7 +397,7 @@ public class BoardState {
                     }
                     else {
                         // only move the rook
-                        theBoard[0][5] = new Rook(false, 0, 5);
+                        theBoard[0][5] = new Rook(false, 0, 5, theBoard[0][7]);
                         theBoard[0][5].hasMoved = true;
                         theBoard[0][7] = null;
                         // update the objects location on the board
@@ -411,7 +411,7 @@ public class BoardState {
                     // we account for the king moving later
                     if (whiteToMove) {
                         // only move the rook
-                        theBoard[7][3] = new Rook(true, 7, 3);
+                        theBoard[7][3] = new Rook(true, 7, 3, theBoard[7][0]);
                         theBoard[7][3].hasMoved = true;
                         theBoard[7][0] = null;
                         // update the objects location on the board
@@ -420,7 +420,7 @@ public class BoardState {
                     }
                     else {
                         // only move the rook
-                        theBoard[0][3] = new Rook(false, 0, 3);
+                        theBoard[0][3] = new Rook(false, 0, 3, theBoard[0][0]);
                         theBoard[0][3].hasMoved = true;
                         theBoard[0][0] = null;
                         // update the objects location on the board
@@ -532,51 +532,51 @@ public class BoardState {
     public void setClassicalPosition () {
 
         for (int p = 0; p < 8; p++) {
-            theBoard[1][p] = new Pawn(false, 1, p);
-            theBoard[6][p] = new Pawn(true, 6, p);
+            theBoard[1][p] = new Pawn(false, 1, p, null);
+            theBoard[6][p] = new Pawn(true, 6, p, null);
         }
 
-        theBoard[0][0] = new Rook(false, 0, 0);
-        theBoard[0][7] = new Rook(false, 0, 7);
-        theBoard[7][0] = new Rook(true, 7, 0);
-        theBoard[7][7] = new Rook(true, 7, 7);
+        theBoard[0][0] = new Rook(false, 0, 0, null);
+        theBoard[0][7] = new Rook(false, 0, 7, null);
+        theBoard[7][0] = new Rook(true, 7, 0, null);
+        theBoard[7][7] = new Rook(true, 7, 7, null);
 
-        theBoard[0][1] = new Knight(false, 0, 1);
-        theBoard[0][6] = new Knight(false, 0, 6);
-        theBoard[7][1] = new Knight(true, 7, 1);
-        theBoard[7][6] = new Knight(true, 7, 6);
+        theBoard[0][1] = new Knight(false, 0, 1, null);
+        theBoard[0][6] = new Knight(false, 0, 6, null);
+        theBoard[7][1] = new Knight(true, 7, 1, null);
+        theBoard[7][6] = new Knight(true, 7, 6, null);
 
-        theBoard[0][2] = new Bishop(false, 0, 2);
-        theBoard[0][5] = new Bishop(false, 0, 5);
-        theBoard[7][2] = new Bishop(true, 7, 2);
-        theBoard[7][5] = new Bishop(true, 7, 5);
+        theBoard[0][2] = new Bishop(false, 0, 2, null);
+        theBoard[0][5] = new Bishop(false, 0, 5, null);
+        theBoard[7][2] = new Bishop(true, 7, 2, null);
+        theBoard[7][5] = new Bishop(true, 7, 5, null);
 
-        theBoard[0][3] = new Queen(false, 0, 3);
-        theBoard[7][3] = new Queen(true, 7, 3);
+        theBoard[0][3] = new Queen(false, 0, 3, null);
+        theBoard[7][3] = new Queen(true, 7, 3, null);
 
-        theBoard[0][4] = new King(false, 0, 4);
-        theBoard[7][4] = new King(true, 7, 4);
+        theBoard[0][4] = new King(false, 0, 4, null);
+        theBoard[7][4] = new King(true, 7, 4, null);
 
     } // setClassicalPosition
 
     public void setPiece(boolean colour, char pieceLetter, int r, int c) {
         if(pieceLetter=='k' || pieceLetter=='K') {
-            theBoard[r][c] = new King(colour, r, c);
+            theBoard[r][c] = new King(colour, r, c, null);
         }
         else if(pieceLetter=='p' || pieceLetter=='P') {
-            theBoard[r][c] = new Pawn(colour, r, c);
+            theBoard[r][c] = new Pawn(colour, r, c, null);
         }
         else if(pieceLetter=='r' || pieceLetter=='R') {
-            theBoard[r][c] = new Rook(colour, r, c);
+            theBoard[r][c] = new Rook(colour, r, c, null);
         }
         else if(pieceLetter=='n' || pieceLetter=='N') {
-            theBoard[r][c] = new Knight(colour, r, c);
+            theBoard[r][c] = new Knight(colour, r, c, null);
         }
         else if(pieceLetter=='b' || pieceLetter=='B') {
-            theBoard[r][c] = new Bishop(colour, r, c);
+            theBoard[r][c] = new Bishop(colour, r, c, null);
         }
         else if(pieceLetter=='q' || pieceLetter=='Q') {
-            theBoard[r][c] = new Queen(colour, r, c);
+            theBoard[r][c] = new Queen(colour, r, c, null);
         }
     }
 

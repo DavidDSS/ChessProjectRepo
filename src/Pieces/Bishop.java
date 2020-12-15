@@ -15,12 +15,15 @@ public class Bishop extends Piece {
             {-1, -1},
     };
 
-    public Bishop(boolean color, int r, int c){
-        super(color, r, c);
-        type=PieceType.BISHOP;
-        this.pieceLetter=color?'b':'B';
-        moves= new ArrayList<>();
-
+    public Bishop(boolean color, int r, int c, Piece p){
+        super(color, r, c, p);
+        if (p != null) {
+            this.makeCopy(p);
+        }
+        else {
+            type=PieceType.BISHOP;
+            this.pieceLetter=color?'b':'B';
+        }
     }
 
     @Override
@@ -37,7 +40,7 @@ public class Bishop extends Piece {
                 if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
                 //If no piece add move
                 if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
-                    moves.add(new Bishop(this.white, pr + i*dir[0], pc + i*dir[1]));
+                    moves.add(new Bishop(this.white, pr + i*dir[0], pc + i*dir[1], this));
                 }
                 //If piece encounter add move if opposite color
                 if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
@@ -48,7 +51,7 @@ public class Bishop extends Piece {
                             break;
                         }
                         else {
-                            moves.add(new Bishop(this.white, pr + i*dir[0], pc + i*dir[1]));
+                            moves.add(new Bishop(this.white, pr + i*dir[0], pc + i*dir[1], this));
                             break;
                         }
                     }
@@ -59,7 +62,7 @@ public class Bishop extends Piece {
                             break;
                         }
                         else {
-                            moves.add(new Bishop(this.white, pr + i*dir[0], pc + i*dir[1]));
+                            moves.add(new Bishop(this.white, pr + i*dir[0], pc + i*dir[1], this));
                             break;
                         }
                     }

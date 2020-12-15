@@ -17,28 +17,12 @@ public abstract class Piece {
     public PieceType type;
     public boolean hasMoved=false;
     public boolean isPinned = false;
-    ArrayList<Piece> moves;
+    ArrayList<Piece> moves = new ArrayList<>();
 
-    public Piece(boolean color, int r, int c){
-        this.setColor(color);
-        this.row= r;
-        this.col= c;
-    }
-
-    public boolean isCaptured(){
-        return this.captured;
-    }
-
-    public boolean isWhite(){
-        return white;
-    }
-
-    public void setColor(boolean color){
-        this.white=color;
-    }
-
-    public void setCaptured(boolean captured){
-        this.captured=captured;
+    public Piece(boolean color, int r, int c, Piece p){
+        this.white = color;
+        this.row = r;
+        this.col = c;
     }
 
     public boolean inBounds(int r, int c){
@@ -51,4 +35,19 @@ public abstract class Piece {
     public abstract ArrayList<Piece> getMoves(BoardState board);
 
     public abstract int evaluatePiece(BoardState board);
+
+    public void makeCopy (Piece p) {
+        // not sure if we need this since colour, row, and column are set automatically
+        //this.row = p.row;
+        //this.col= p.col;
+        //this.white = p.white;
+        this.prevRow = p.prevRow;
+        this.prevCol = p.prevCol;
+        this.type = p.type;
+        this.pieceLetter = p.pieceLetter;
+        this.hasMoved = p.hasMoved;
+        this.isPinned = p.isPinned;
+        this.moves = p.moves;
+        this.captured = p.captured;
+    }
 }

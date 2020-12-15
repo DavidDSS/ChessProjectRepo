@@ -8,18 +8,18 @@
       <change beforePath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/King.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/King.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Knight.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Knight.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Pawn.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Pawn.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Piece.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Piece.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Queen.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Queen.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Rook.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChessProjectRepo/Pieces/Rook.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ChessProjectRepo/PlayChess.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ChessProjectRepo/PlayChess.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Board/BoardState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board/BoardState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Engine/Engine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Engine/Engine.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/Bishop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Bishop.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/King.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/King.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/Knight.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Knight.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/Pawn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Pawn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Pieces/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Piece.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/Queen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Queen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pieces/Rook.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pieces/Rook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PlayChess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PlayChess.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +118,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607918693425</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="- AI functioning now&#10;- changed BoardState to have a copy constructor&#10;- fixed en passant bug&#10;- know bugs: black castling, pawn moving 2 spaces multiple times">
+      <created>1607987188599</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1607987188599</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -126,22 +133,23 @@
     <MESSAGE value="- smol text updates&#10;- added idea for pinned pieces" />
     <MESSAGE value="- fixed checking bug&#10;- added engine package and alphabeta algorithm (not tested)&#10;- added prevRow and prevCol to Piece class&#10;- found a bug with black castling, not fixed" />
     <MESSAGE value="- added evaluation functions to pieces" />
-    <option name="LAST_COMMIT_MESSAGE" value="- added evaluation functions to pieces" />
+    <MESSAGE value="- AI functioning now&#10;- changed BoardState to have a copy constructor&#10;- fixed en passant bug&#10;- know bugs: black castling, pawn moving 2 spaces multiple times" />
+    <option name="LAST_COMMIT_MESSAGE" value="- AI functioning now&#10;- changed BoardState to have a copy constructor&#10;- fixed en passant bug&#10;- know bugs: black castling, pawn moving 2 spaces multiple times" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="612" y="182" key="#com.intellij.ide.util.MemberChooser" timestamp="1607902098803">
+    <state x="612" y="182" key="#com.intellij.ide.util.MemberChooser" timestamp="1607991977618">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="612" y="182" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1607902098803" />
+    <state x="612" y="182" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1607991977618" />
     <state x="765" y="230" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1607268851522" />
     <state x="566" y="298" width="403" height="236" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1607985495897">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="566" y="298" width="403" height="236" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1536.824@0.0.1536.824" timestamp="1607985495897" />
-    <state x="62" y="0" width="1412" height="824" key="CommitChangelistDialog2" timestamp="1607987155204">
+    <state x="62" y="0" width="1412" height="824" key="CommitChangelistDialog2" timestamp="1607987188042">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="62" y="0" width="1412" height="824" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1607987155204" />
+    <state x="62" y="0" width="1412" height="824" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1607987188042" />
     <state width="460" height="370" key="DebuggerActiveHint" timestamp="1607984153929">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -151,25 +159,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="803" y="162" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1607309675372" />
-    <state width="1493" height="324" key="GridCell.Tab.0.bottom" timestamp="1607986967081">
+    <state width="1493" height="223" key="GridCell.Tab.0.bottom" timestamp="1607992895865">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="324" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607986967081" />
+    <state width="1493" height="223" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1607992895865" />
     <state width="1877" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1607535296526" />
-    <state width="1493" height="324" key="GridCell.Tab.0.center" timestamp="1607986967081">
+    <state width="1493" height="223" key="GridCell.Tab.0.center" timestamp="1607992895865">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="324" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607986967081" />
+    <state width="1493" height="223" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1607992895865" />
     <state width="1877" height="294" key="GridCell.Tab.0.center/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1607535296526" />
-    <state width="1493" height="324" key="GridCell.Tab.0.left" timestamp="1607986967081">
+    <state width="1493" height="223" key="GridCell.Tab.0.left" timestamp="1607992895865">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="324" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607986967081" />
+    <state width="1493" height="223" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1607992895865" />
     <state width="1877" height="294" key="GridCell.Tab.0.left/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1607535296526" />
-    <state width="1493" height="324" key="GridCell.Tab.0.right" timestamp="1607986967081">
+    <state width="1493" height="223" key="GridCell.Tab.0.right" timestamp="1607992895865">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="324" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607986967081" />
+    <state width="1493" height="223" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1607992895865" />
     <state width="1877" height="294" key="GridCell.Tab.0.right/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1607535296526" />
     <state width="1493" height="257" key="GridCell.Tab.1.bottom" timestamp="1607986622564">
       <screen x="0" y="0" width="1536" height="824" />
@@ -199,10 +207,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1607291093385" />
-    <state x="361" y="146" key="Vcs.Push.Dialog.v2" timestamp="1607921546482">
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2" timestamp="1607987197114">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1607921546482" />
+    <state x="361" y="146" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1607987197114" />
     <state x="525" y="273" key="com.intellij.ide.util.TipDialog" timestamp="1607866865143">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
