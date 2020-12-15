@@ -47,8 +47,20 @@ public class Queen extends Piece {
         // is the queen on a good central square
         // is the queen pinning a piece
         int eval = 0;
+        int pr = this.row;
+        int pc = this.col;
+        int minmax = this.white ? 1 : -1;
 
+        // points for piece development
+        if (this.hasMoved && !this.hasDeveloped) {
+            eval += minmax*5;
+            this.hasDeveloped = true;
+        }
 
+        // how many squares does the queen control
+        if (this.moves!= null && this.moves.size() > 0) {
+            eval += minmax*this.moves.size();
+        }
 
 
         return this.value + eval;

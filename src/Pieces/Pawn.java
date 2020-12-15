@@ -11,10 +11,10 @@ public class Pawn extends Piece {
     int[][] idealSquares = {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 5, 0, 0, 0, 0, 5, 1},
-            {5, 0, 5, 10, 10, 0, 0, 5},
-            {5, 0, 5, 10, 10, 0, 0, 5},
-            {1, 5, 0, 0, 0, 0, 5, 1},
+            {1, 5, 2, 2, 2, 2, 5, 1},
+            {5, 0, 5, 7, 7, 2, 3, 5},
+            {5, 0, 5, 7, 7, 2, 3, 5},
+            {1, 5, 2, 2, 2, 2, 5, 1},
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0}
     };
@@ -181,7 +181,7 @@ public class Pawn extends Piece {
         eval += minmax*(this.white ? 6 - pr : 1 - pr);
 
         // points for the piece being on its most effective square
-        eval += minmax*idealSquares[this.row][this.col];
+        eval += minmax*idealSquares[pr][pc];
 
         // is this a central pawn or flank pawn
         if (pc == 3 || pc == 4) {

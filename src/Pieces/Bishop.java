@@ -14,6 +14,16 @@ public class Bishop extends Piece {
             {1, -1},
             {-1, -1},
     };
+    int[][] idealSquares = {
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 8, 0, 0, 0, 0, 8, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 5, 5, 5, 5, 5, 5, 0},
+            {0, 5, 5, 5, 5, 5, 5, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 8, 0, 0, 0, 0, 8, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0}
+    };
 
     public Bishop(boolean color, int r, int c, Piece p){
         super(color, r, c, p);
@@ -82,37 +92,42 @@ public class Bishop extends Piece {
         int minmax = this.white ? 1 : -1;
 
         // points for piece development
-        if (this.hasMoved) {
+        if (this.hasMoved && !this.hasDeveloped) {
             eval += minmax*5;
+            this.hasDeveloped = true;
         }
+
+        // points for the piece being on its most effective square
+        eval += minmax*idealSquares[pr][pc];
 
         // is the bishop on a long diagonal
         // how many squares is the bishop controlling
         // is the bishop attacking/defending a piece
         // points for check
-        for (int[] dir : directions) {
-            //Check Upward Right Diagonal
-            for(int i=1; i<8;i++){
-                //Check if move is in bounds
-                if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
-                // add point for possible move
-                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
-                    eval += minmax*1;
-                }
-                //If piece encounter add point
-                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
-                    eval += minmax*1;
-                    // attack puts king in check
-                    if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
-                        eval += minmax*2;
-                    }
-                    break;
-                }
-            }
+//        for (int[] dir : directions) {
+//            //Check Upward Right Diagonal
+//            for(int i=1; i<8;i++){
+//                //Check if move is in bounds
+//                if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
+//                // add point for possible move
+//                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
+//                    eval += minmax*1;
+//                }
+//                //If piece encounter add point
+//                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
+//                    eval += minmax*1;
+//                    // attack puts king in check
+//                    if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
+//                        eval += minmax*2;
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+        // how many squares does the bishop control
+        if (this.moves!= null && this.moves.size() > 0) {
+            eval += minmax*this.moves.size();
         }
-
-        // is the bishop pointing towards the enemy king
-
 
         // do we have the bishop pair
         boolean bishopPair = true;

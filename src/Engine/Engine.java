@@ -4,10 +4,12 @@ import Board.BoardState;
 import Pieces.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Engine {
 
     private BoardState position;
+    private ArrayList<BoardState> initialMoves = new ArrayList<>();
 
     public Engine (BoardState p) {
 
@@ -40,18 +42,31 @@ public class Engine {
         if (moves.size() == 0) {
             return null;
         }
-        // some default move
-        else {
-            bestMove = moves.get(0);
-        }
 
+        // evaluate each initial move
         for (Piece m : moves) {
             BoardState p = new BoardState(this.position);
+            // make the move
             p.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
+            // evaluate the move
+            m.evaluation = p.evaluatePosition();
+        }
+        // sort moves by evaluation (min to max)
+        moves.sort(Comparator.comparingDouble(Piece::getEvaluation));
 
+        // for efficiency only consider top 3 moves
+        moves = new ArrayList<>(moves.subList(0, 3));
+
+        // some default move
+        bestMove = moves.get(0);
+
+        // compare the moves
+        for (Piece m : moves) {
+            BoardState p = new BoardState(this.position);
+            // make the move
+            p.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
             // check the evaluation of the move
-            newEval = alphabeta(1, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, p);
-
+            newEval = alphabeta(2, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, p);
             // for white we want the maximum value
             if (position.whiteToMove) {
                 if (currEval <= newEval) {
@@ -81,10 +96,29 @@ public class Engine {
             return currPosition.evaluatePosition();
         }
 
+        // get all moves
+        ArrayList<Piece> moves = currPosition.getAllPossibleMoves();
+        // evaluate initial move
+        for (Piece m : moves) {
+            BoardState p = new BoardState(currPosition);
+            // make the move
+            p.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
+            // evaluate the move
+            m.evaluation = p.evaluatePosition();
+        }
+        // sort moves by evaluation (min to max)
+        moves.sort(Comparator.comparingDouble(Piece::getEvaluation));
+        // for efficiency only consider top 3 moves
+        if (currPosition.whiteToMove) {
+            moves = new ArrayList<>(moves.subList(moves.size()-3, moves.size()));
+        }
+        else {
+            moves = new ArrayList<>(moves.subList(0, 3));
+        }
+
         double eval;
         if (currPosition.whiteToMove) {
             eval = Double.NEGATIVE_INFINITY;
-            ArrayList<Piece> moves = currPosition.getAllPossibleMoves();
             for (Piece m : moves) {
                 // create a deep copy of the board state and pieces
                 BoardState newPosition = new BoardState(currPosition);
@@ -99,7 +133,6 @@ public class Engine {
         }
         else {
             eval = Double.POSITIVE_INFINITY;
-            ArrayList<Piece> moves = currPosition.getAllPossibleMoves();
             for (Piece m : moves) {
                 // create a deep copy of the board state and pieces
                 BoardState newPosition = new BoardState(currPosition);

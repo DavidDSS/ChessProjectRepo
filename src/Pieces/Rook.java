@@ -83,24 +83,28 @@ public class Rook extends Piece{
         // how many available squares the rook has to move
         // is the rook attacking/defending a piece
         // points for check
-        for (int[] dir : directions) {
-            for (int i = 1; i < 8; i++) {
-                //Check if move is in bounds
-                if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
-                // add point for possible move
-                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
-                    eval += minmax*1;
-                }
-                //If piece encounter add point
-                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
-                    eval += minmax*1;
-                    // attack puts king in check
-                    if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
-                        eval += minmax*2;
-                    }
-                    break;
-                }
-            }
+//        for (int[] dir : directions) {
+//            for (int i = 1; i < 8; i++) {
+//                //Check if move is in bounds
+//                if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
+//                // add point for possible move
+//                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
+//                    eval += minmax*1;
+//                }
+//                //If piece encounter add point
+//                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
+//                    eval += minmax*1;
+//                    // attack puts king in check
+//                    if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
+//                        eval += minmax*2;
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+        // how many squares does the rook control
+        if (this.moves!= null && this.moves.size() > 0) {
+            eval += minmax*this.moves.size();
         }
 
         return this.value + eval;

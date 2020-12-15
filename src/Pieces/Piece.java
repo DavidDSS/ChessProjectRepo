@@ -16,7 +16,9 @@ public abstract class Piece {
     public char pieceLetter;
     public PieceType type;
     public boolean hasMoved=false;
+    public boolean hasDeveloped=false;
     public boolean isPinned = false;
+    public double evaluation = 0;
     ArrayList<Piece> moves = new ArrayList<>();
 
     public Piece(boolean color, int r, int c, Piece p){
@@ -49,5 +51,10 @@ public abstract class Piece {
         this.isPinned = p.isPinned;
         this.moves = p.moves;
         this.captured = p.captured;
+        this.hasDeveloped = p.hasDeveloped;
+        this.evaluation = p.evaluation;
+    }
+    public double getEvaluation () {
+        return this.evaluation;
     }
 }
