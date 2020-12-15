@@ -70,6 +70,14 @@ public class Knight extends Piece {
         // does the knight attack multiple pieces, if so which ones ?
         // can we develop this piece ?
         int eval = 0;
+        int pr = this.row;
+        int pc = this.col;
+        int minmax = this.white ? 1 : -1;
+
+        // points for piece development
+        if (this.hasMoved) {
+            eval += minmax*10;
+        }
         return this.value + eval;
     }
 }

@@ -8,6 +8,17 @@ public class Pawn extends Piece {
 
     boolean isAttacking=false;
     int value = this.white ? 10 : -10;
+    int[][] idealSquares = {
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 2, 0, 0, 0, 0, 2, 0},
+            {4, 0, 4, 10, 10, 0, 0, 4},
+            {4, 0, 4, 10, 10, 0, 0, 4},
+            {0, 2, 0, 0, 0, 0, 2, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0}
+
+    };
 
     public Pawn(boolean color, int r, int c, Piece p){
         super(color, r, c, p);
@@ -168,11 +179,13 @@ public class Pawn extends Piece {
         int pc = this.col;
 
         // how far has the pawn advanced
-        //eval += minmax*(this.white ? 6 - pr : 1 - pr);
+        eval += minmax*(this.white ? 6 - pr : 1 - pr);
+
+        eval += minmax*idealSquares[this.row][this.col];
 
         // is this a central pawn or flank pawn
         if (pc == 3 || pc == 4) {
-            eval += minmax*3;
+            eval += minmax*2;
         }
         else if (pc == 0 || pc == 7) {
             eval += minmax*1;

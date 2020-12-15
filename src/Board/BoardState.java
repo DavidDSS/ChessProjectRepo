@@ -19,6 +19,7 @@ public class BoardState {
     public boolean kingInCheck = false;
     public boolean enPassant = false;
     public boolean gameOver = false;
+    public boolean legalMove = true;
 
     public ArrayList<Piece> piecesAttackingKing = new ArrayList<>();
     public ArrayList<Piece> capturedPiecesWhite = new ArrayList<>();
@@ -41,7 +42,8 @@ public class BoardState {
             // deep copy of the board and pieces
             this.theBoard = b.theBoard.clone();
             this.theBoard = this.createDeepCopy(b.theBoard);
-            this.attackedByPiece = b.attackedByPiece.clone();
+            // i dont think we want to copy this
+            //this.attackedByPiece = b.attackedByPiece.clone();
 
         }
     } // copy constructor
@@ -130,7 +132,8 @@ public class BoardState {
 
         // user chose empty square
         if(theBoard[startPos[0]][startPos[1]]==null){
-            System.out.println("That is not a legal move!");
+            System.out.println("That is an illegal move!");
+            legalMove = false;
             return;
         }
 
@@ -230,7 +233,7 @@ public class BoardState {
         ArrayList<Piece> lineOfAttack = new ArrayList<>();
         Piece king = null;
 
-        // get the position of the black king
+        // get the position of the king
         for(int r=0; r<8; r++) {
             for (int c = 0; c < 8; c++) {
                 if(theBoard[r][c]!=null && theBoard[r][c].type==PieceType.KING && theBoard[r][c].white==whiteToMove){
@@ -280,7 +283,7 @@ public class BoardState {
         if (attackingPiece.type == PieceType.BISHOP || attackingPiece.type == PieceType.QUEEN) {
             int incRow = rowDistance > 0 ? -1 : 1;
             int incCol = colDistance > 0 ? -1 : 1;
-            int destination = attackingPiece.row;
+            int destination = attackingPiece.row+incRow;
             int i = 1;
             while (destination != king.row) {
                 if (attackingPiece.type == PieceType.BISHOP) {

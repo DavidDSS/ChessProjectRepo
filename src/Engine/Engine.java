@@ -55,12 +55,14 @@ public class Engine {
             // for white we want the maximum value
             if (position.whiteToMove) {
                 if (currEval <= newEval) {
+                    currEval = newEval;
                     bestMove = m;
                 }
             }
             // for black we want the minimum value
             else {
                 if (currEval >= newEval) {
+                    currEval = newEval;
                     bestMove = m;
                 }
             }
@@ -79,8 +81,9 @@ public class Engine {
             return currPosition.evaluatePosition();
         }
 
+        double eval;
         if (currPosition.whiteToMove) {
-            double eval = Double.NEGATIVE_INFINITY;
+            double maxEval = Double.NEGATIVE_INFINITY;
             ArrayList<Piece> moves = currPosition.getAllPossibleMoves();
             for (Piece m : moves) {
                 // create a deep copy of the board state and pieces
@@ -88,14 +91,15 @@ public class Engine {
                 newPosition.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
                 // continue recursive call
                 eval = alphabeta(depth-1, alpha, beta, newPosition);
+                maxEval = Math.max(maxEval, eval);
                 alpha = Math.max(alpha, eval);
                 // pruning, disregard branch
                 if (beta <= alpha) break;
             }
-            return eval;
+            return maxEval;
         }
         else {
-            double eval = Double.POSITIVE_INFINITY;
+            double minEval = Double.POSITIVE_INFINITY;
             ArrayList<Piece> moves = currPosition.getAllPossibleMoves();
             for (Piece m : moves) {
                 // create a deep copy of the board state and pieces
@@ -104,11 +108,12 @@ public class Engine {
                 newPosition.makeMove(new int[]{m.prevRow, m.prevCol}, new int[]{m.row, m.col});
                 // continue recursive call
                 eval = alphabeta(depth-1, alpha, beta, newPosition);
+                minEval = Math.min(minEval, eval);
                 beta = Math.min(beta, eval);
                 // pruning, disregard branch
                 if (beta <= alpha) break;
             }
-            return eval;
+            return minEval;
         }
 
     } // alphabeta

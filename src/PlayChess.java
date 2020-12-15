@@ -152,12 +152,21 @@ public class PlayChess {
                 board.userMove(theMove,endMove);
                 // print the board
                 board.printBoard();
+                // check if move went through
+                if (board.legalMove) {
+                    // let the engine make a move
+                    board.engineMove();
+                    // print the board
+                    board.printBoard();
+                }
+                // reset flag on illegal move
+                else {
+                    board.legalMove = true;
+                }
+
             }
 
-            // let the engine make a move
-            board.engineMove();
-            // print the board
-            board.printBoard();
+
         }
 
         System.out.println("Game over!");

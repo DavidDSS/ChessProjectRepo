@@ -81,6 +81,11 @@ public class Bishop extends Piece {
         int pc = this.col;
         int minmax = this.white ? 1 : -1;
 
+        // points for piece development
+        if (this.hasMoved) {
+            eval += minmax*10;
+        }
+
         // is the bishop on a long diagonal
         // how many squares is the bishop controlling
         // is the bishop attacking/defending a piece
