@@ -6,6 +6,13 @@ import Pieces.*;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 
+/**
+ Jason Grightmire (5388327)
+ David Saldana Suarez (6155964)
+ COSC 3P71
+ Chess Project
+ */
+
 public class BoardState {
 
     public Piece[][] theBoard = new Piece[8][8];
@@ -114,15 +121,15 @@ public class BoardState {
 
         if (this.checkmate) {
             if (this.whiteToMove) {
-                checkmateEval -= 900;
+                checkmateEval -= 9000;
             }
             else {
-                checkmateEval += 900;
+                checkmateEval += 9000;
             }
         }
 
         // set and return the evaluation
-        this.evaluation = activityEval + pieceEval + checkmateEval;;
+        this.evaluation = 0.7*activityEval + pieceEval + checkmateEval;
         return 0.7*activityEval + pieceEval + checkmateEval;
     }
 

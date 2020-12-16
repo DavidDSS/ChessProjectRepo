@@ -5,6 +5,13 @@ import Pieces.Piece;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ Jason Grightmire (5388327)
+ David Saldana Suarez (6155964)
+ COSC 3P71
+ Chess Project
+ */
+
 public class PlayChess {
 
     public static int[] convertNotation(char[] spot){
@@ -42,7 +49,7 @@ public class PlayChess {
         System.out.println("Press 0 to use Classic Board \nPress 1 to use Custom Board (Testing)");
         int choice= userInput.nextInt();
 
-        System.out.println("Please set a depth for the engine search");
+        System.out.println("Please set a depth for the engine search (3-5 recommended): ");
         int depth = userInput.nextInt();
 
         //User chose to use classic board
