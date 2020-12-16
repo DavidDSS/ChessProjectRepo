@@ -3,11 +3,23 @@ package Pieces;
 import Board.BoardState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class King extends Piece {
 
     boolean[][] attackedByPiece = new boolean[8][8];
     int value = this.white ? 9000 : -9000;
+    int[][] idealSquares = {
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-30, -40, -40, -50, -50, -40, -40, -30},
+            {-20, -30, -30, -40, -40, -30, -30, -20},
+            {-10, -20, -20, -20, -20, -20, -20, -10},
+            {20,  20,   0,   0,   0,   0,  20,  20},
+            {20,  30,  10,   0,   0,  10,  30,  20}
+    };
 
     public King(boolean color, int r, int c, Piece p){
         super(color, r, c, p);
@@ -119,6 +131,22 @@ public class King extends Piece {
         // is the king safe in corner of the board
         // can the king attack a piece, how many pieces are on the board ?
         int eval = 0;
+        int pr = this.row;
+        int pc = this.col;
+        int minmax = this.white ? 1 : -1;
+
+        // how many escape squares does the king have
+        if (this.moves!= null && this.moves.size() > 0) {
+            eval += minmax*this.moves.size();
+        }
+
+
+        if (!this.white) {
+            Collections.reverse(Arrays.asList(idealSquares));
+        }
+        // points for the piece being on its most effective square
+        eval += minmax*idealSquares[pr][pc];
+
         return this.value + eval;
     }
 

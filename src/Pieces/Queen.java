@@ -3,10 +3,22 @@ package Pieces;
 import Board.BoardState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Queen extends Piece {
 
     int value = this.white ? 900 : -900;
+    int[][] idealSquares = {
+            {-20,-10,-10,  0,  0,-10,-10,-20},
+            {-10,  0,  0,  0,  0,  5,  0,-10},
+            {-10,  0,  5,  5,  5,  5,  0,-10},
+            {  5,  0,  5,  5,  5,  5,  0,  5},
+            {  5,  0,  5,  5,  5,  5,  0,  5},
+            {-10,  5,  5,  5,  5,  5,  0,-10},
+            {-10,  0,  5,  0,  0,  0,  0,-10},
+            {-20,-10,-10,  0,  0,-10,-10,-20}
+    };
 
     public Queen(boolean color, int r, int c, Piece p){
         super(color, r, c, p);
@@ -62,6 +74,11 @@ public class Queen extends Piece {
             eval += minmax*this.moves.size();
         }
 
+        if (!this.white) {
+            Collections.reverse(Arrays.asList(idealSquares));
+        }
+        // points for the piece being on its most effective square
+        eval += minmax*idealSquares[pr][pc];
 
         return this.value + eval;
     }

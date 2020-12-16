@@ -3,20 +3,22 @@ package Pieces;
 import Board.BoardState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Pawn extends Piece {
 
     boolean isAttacking=false;
-    int value = this.white ? 100 : -100;
+    int value = this.white ? 75 : 75;
     int[][] idealSquares = {
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {1, 5, 2, 2, 2, 2, 5, 1},
-            {5, 0, 5, 7, 7, 2, 3, 5},
-            {5, 0, 5, 7, 7, 2, 3, 5},
-            {1, 5, 2, 2, 2, 2, 5, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0}
+            {0,  0,  0,  0,  0,  0,  0,  0},
+            {50, 50, 50, 50, 50, 50, 50, 50},
+            {10, 10, 20, 30, 30, 20, 10, 10},
+            {5,  5, 10, 27, 27, 10,  5,  5},
+            {0,  0,  0, 25, 25,  0,  0,  0},
+            {5, -5,-10,  0,  0,-10, -5,  5},
+            {5, 10, 10,-25,-25, 10, 10,  5},
+            {0,  0,  0,  0,  0,  0,  0,  0}
     };
 
     public Pawn(boolean color, int r, int c, Piece p){
@@ -180,9 +182,6 @@ public class Pawn extends Piece {
         // how far has the pawn advanced
         eval += minmax*(this.white ? 6 - pr : 1 - pr);
 
-        // points for the piece being on its most effective square
-        eval += minmax*idealSquares[pr][pc];
-
         // is this a central pawn or flank pawn
         if (pc == 3 || pc == 4) {
             eval += minmax*2;
@@ -211,10 +210,11 @@ public class Pawn extends Piece {
             }
         }
 
-        // is the pawn attacking an enemy piece
-        if (this.isAttacking) {
-            eval += minmax*2;
+        if (!this.white) {
+            Collections.reverse(Arrays.asList(idealSquares));
         }
+        // points for the piece being on its most effective square
+        eval += minmax*idealSquares[pr][pc];
 
         return this.value + eval;
     }

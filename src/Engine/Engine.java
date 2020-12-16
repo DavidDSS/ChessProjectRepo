@@ -62,6 +62,11 @@ public class Engine {
             Collections.reverse(moves);
         }
 
+        // for efficiency only consider top 5 moves
+        if (moves.size() >= 5) {
+            moves = new ArrayList<>(moves.subList(0, 5));
+        }
+
         // some default move
         bestMove = moves.get(0);
 
@@ -129,6 +134,17 @@ public class Engine {
         // sort them max to min for white
         if (currPosition.whiteToMove) {
             Collections.reverse(moves);
+        }
+        // for efficiency only consider top 5 moves
+        if (currPosition.whiteToMove) {
+            if (moves.size() >= 5) {
+                moves = new ArrayList<>(moves.subList(moves.size() - 5, moves.size()));
+            }
+        }
+        else {
+            if (moves.size() >= 5) {
+                moves = new ArrayList<>(moves.subList(0, 5));
+            }
         }
 
         double eval;

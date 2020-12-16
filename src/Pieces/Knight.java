@@ -3,19 +3,21 @@ package Pieces;
 import Board.BoardState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Knight extends Piece {
 
     int value = this.white ? 300 : -300;
     int[][] idealSquares = {
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 5, 0, 0},
-            {0, 5, 0, 5, 5, 0, 5, 0},
-            {0, 5, 0, 5, 5, 0, 5, 0},
-            {0, 0, 0, 0, 0, 5, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0}
+            {-50,-40,-30,-30,-30,-30,-40,-50},
+            {-40,-20,  0,  0,  0,  0,-20,-40},
+            {-30,  0, 10, 15, 15, 10,  0,-30},
+            {-30,  5, 15, 20, 20, 15,  5,-30},
+            {-30,  0, 15, 20, 20, 15,  0,-30},
+            {-30,  5, 10, 15, 15, 10,  5,-30},
+            {-40,-20,  0,  5,  5,  0,-20,-40},
+            {-50,-40,-20,-30,-30,-20,-40,-50},
     };
 
     public Knight(boolean color, int r, int c, Piece p){
@@ -79,17 +81,14 @@ public class Knight extends Piece {
         int pc = this.col;
         int minmax = this.white ? 1 : -1;
 
-        // points for piece development
-        if (this.hasMoved && !this.hasDeveloped) {
-            eval += minmax*5;
-            this.hasDeveloped = true;
-        }
-
         // how many squares does the knight control
         if (this.moves!= null && this.moves.size() > 0) {
             eval += minmax*this.moves.size();
         }
 
+        if (!this.white) {
+            Collections.reverse(Arrays.asList(idealSquares));
+        }
         // points for the piece being on its most effective square
         eval += minmax*idealSquares[pr][pc];
 

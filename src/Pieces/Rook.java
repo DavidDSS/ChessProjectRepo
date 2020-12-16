@@ -3,6 +3,8 @@ package Pieces;
 import Board.BoardState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Rook extends Piece{
 
@@ -12,6 +14,16 @@ public class Rook extends Piece{
             {-1, 0},
             {0, -1},
             {0, 1},
+    };
+    int[][] idealSquares = {
+            {  0,  0,  0,  0,  0,  0,  0,  0},
+            { 20, 20, 20, 20, 20, 20, 20, 20},
+            {  0,  0,  0,  0,  0,  0,  0,  0},
+            {  5,  0,  5,  5,  5,  5,  0,  5},
+            {  5,  0,  5,  5,  5,  5,  0,  5},
+            {  5,  0,  0,  0,  0,  0,  0,  5},
+            {  0,  0,  0,  0,  0,  0,  0,  0},
+            {  0, 10, 0,  0,  0,  0,  10,  0}
     };
 
     public Rook(boolean color, int r, int c, Piece p){
@@ -80,32 +92,16 @@ public class Rook extends Piece{
         int pc = this.col;
         int minmax = this.white ? 1 : -1;
 
-        // how many available squares the rook has to move
-        // is the rook attacking/defending a piece
-        // points for check
-//        for (int[] dir : directions) {
-//            for (int i = 1; i < 8; i++) {
-//                //Check if move is in bounds
-//                if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
-//                // add point for possible move
-//                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] == null) {
-//                    eval += minmax*1;
-//                }
-//                //If piece encounter add point
-//                if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]] != null) {
-//                    eval += minmax*1;
-//                    // attack puts king in check
-//                    if (board.theBoard[pr + i*dir[0]][pc + i*dir[1]].type == PieceType.KING) {
-//                        eval += minmax*2;
-//                    }
-//                    break;
-//                }
-//            }
-//        }
         // how many squares does the rook control
         if (this.moves!= null && this.moves.size() > 0) {
             eval += minmax*this.moves.size();
         }
+
+        if (!this.white) {
+            Collections.reverse(Arrays.asList(idealSquares));
+        }
+        // points for the piece being on its most effective square
+        eval += minmax*idealSquares[pr][pc];
 
         return this.value + eval;
     }
