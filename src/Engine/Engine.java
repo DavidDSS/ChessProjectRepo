@@ -62,10 +62,9 @@ public class Engine {
         if (position.whiteToMove) {
             Collections.reverse(moves);
         }
-
-        // for efficiency only consider top 10 moves
-        if (moves.size() >= 10) {
-            moves = new ArrayList<>(moves.subList(0, 10));
+        // for efficiency only consider top 5 moves
+        if (moves.size() >= 5) {
+            moves = new ArrayList<>(moves.subList(0, 5));
         }
 
         // some default move
@@ -109,7 +108,6 @@ public class Engine {
     private double alphabeta (BoardState currPosition, int depth, double alpha, double beta) {
 
         // base cases
-        // out of memory
         // depth
         // checkmate or stalemate
         if (depth==0 || currPosition.checkmate || currPosition.stalemate) {
@@ -128,11 +126,10 @@ public class Engine {
             // evaluate the move
             m.evaluation = p.evaluatePosition();
         }
-
         // sort moves by evaluation (min to max)
         moves.sort(Comparator.comparingDouble(Piece::getEvaluation));
         // sort them max to min for white
-        if (currPosition.whiteToMove) {
+        if (position.whiteToMove) {
             Collections.reverse(moves);
         }
         // for efficiency only consider top 10 moves

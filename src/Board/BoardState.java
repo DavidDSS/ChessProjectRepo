@@ -474,13 +474,19 @@ public class BoardState {
                 // check if move is left or right (enpassant)
                 if(Math.abs(endC-startC)==1){
                     if(enPassantCol==endC){
+                        // white en passant
                         if(this.whiteToMove){
-                            capturedPiecesBlack.add(theBoard[endR+1][endC]);
-                            theBoard[endR+1][endC]=null;
+                            if (theBoard[endR+1][endC]!= null && !theBoard[endR+1][endC].white) {
+                                capturedPiecesBlack.add(theBoard[endR+1][endC]);
+                                theBoard[endR+1][endC]=null;
+                            }
                         }
+                        // black en passant
                         else{
-                            capturedPiecesWhite.add(theBoard[endR-1][endC]);
-                            theBoard[endR-1][endC]=null;
+                            if (theBoard[endR-1][endC]!= null && theBoard[endR-1][endC].white) {
+                                capturedPiecesWhite.add(theBoard[endR-1][endC]);
+                                theBoard[endR-1][endC]=null;
+                            }
                         }
                     }
                 }

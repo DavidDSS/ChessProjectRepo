@@ -179,24 +179,13 @@ public class Pawn extends Piece {
         int pr = this.row;
         int pc = this.col;
 
-        // how far has the pawn advanced
-        eval += minmax*(this.white ? 6 - pr : 1 - pr);
-
-        // is this a central pawn or flank pawn
-        if (pc == 3 || pc == 4) {
-            eval += minmax*10;
-        }
-        else if (pc == 0 || pc == 7) {
-            eval += minmax*5;
-        }
-
         // is the pawn protecting another pawn/piece
         // left column
         if (inBounds(pr+dir, pc-1)) {
             if (board.theBoard[pr+dir][pc-1] != null && (this.white == board.theBoard[pr+dir][pc-1].white)) {
                 eval += minmax*5;
                 if (board.theBoard[pr+dir][pc-1].type == PieceType.PAWN) {
-                    eval += minmax*10;
+                    eval += minmax*5;
                 }
             }
         }
@@ -205,7 +194,7 @@ public class Pawn extends Piece {
             if (board.theBoard[pr+dir][pc+1] != null && (this.white == board.theBoard[pr+dir][pc+1].white)) {
                 eval += minmax*5;
                 if (board.theBoard[pr+dir][pc+1].type == PieceType.PAWN) {
-                    eval += minmax*10;
+                    eval += minmax*5;
                 }
             }
         }
