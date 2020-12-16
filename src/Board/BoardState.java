@@ -91,47 +91,39 @@ public class BoardState {
             checkCheckmate();
         }
         else {
+            System.out.println("AI Move: "+convertAImove(move.prevRow, move.prevCol)+" -> "+convertAImove(move.row, move.col));
             makeMove(move.prevRow, move.prevCol, move.row, move.col);
         }
     }
 
     public double evaluatePosition () {
-        double eval = 0;
+        double activityEval = 0;
+        double pieceEval = 0;
+        double checkmateEval = 0;
 
-        // evaluate one set of pieces
+        // evaluate all pieces
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
-                // only evaluate pieces of the same colour
-                if(theBoard[r][c]!=null && (whiteToMove==theBoard[r][c].white)) {
+                if(theBoard[r][c]!=null) {
                     // get the evaluation of the piece and add it to the total
-                    eval += theBoard[r][c].evaluatePiece(this);
-                }
-            }
-        }
-
-        // evaluate the other set of pieces
-        for (int r = 0; r < 8; r++) {
-            for (int c = 0; c < 8; c++) {
-                // only evaluate pieces of the same colour
-                if(theBoard[r][c]!=null && (whiteToMove!=theBoard[r][c].white)) {
-                    // get the evaluation of the piece and add it to the total
-                    eval += theBoard[r][c].evaluatePiece(this);
+                    pieceEval += theBoard[r][c].value;
+                    activityEval += theBoard[r][c].evaluatePiece(this);
                 }
             }
         }
 
         if (this.checkmate) {
             if (this.whiteToMove) {
-                eval -= 900;
+                checkmateEval -= 900;
             }
             else {
-                eval += 900;
+                checkmateEval += 900;
             }
         }
 
         // set and return the evaluation
-        this.evaluation = eval;
-        return eval;
+        this.evaluation = activityEval + pieceEval + checkmateEval;;
+        return 0.7*activityEval + pieceEval + checkmateEval;
     }
 
     public void userMove(int startR, int startC, int endR, int endC){
@@ -635,6 +627,31 @@ public class BoardState {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public String convertAImove (int r, int c) {
+
+        String move = "";
+
+        if (c==0) move+="a";
+        else if (c==1) move+="b";
+        else if (c==2) move+="c";
+        else if (c==3) move+="d";
+        else if (c==4) move+="e";
+        else if (c==5) move+="f";
+        else if (c==6) move+="g";
+        else if (c==7) move+="h";
+
+        if (r==0) move+="8";
+        else if (r==1) move+="7";
+        else if (r==2) move+="6";
+        else if (r==3) move+="5";
+        else if (r==4) move+="4";
+        else if (r==5) move+="3";
+        else if (r==6) move+="2";
+        else if (r==7) move+="1";
+
+        return move;
     }
 
 }

@@ -19,6 +19,7 @@ public abstract class Piece {
     public boolean hasDeveloped=false;
     public boolean isPinned = false;
     public double evaluation = 0;
+    public int value;
     ArrayList<Piece> moves = new ArrayList<>();
 
     public Piece(boolean color, int r, int c, Piece p){
@@ -53,6 +54,7 @@ public abstract class Piece {
         this.captured = p.captured;
         this.hasDeveloped = p.hasDeveloped;
         this.evaluation = p.evaluation;
+        this.value = p.value;
     }
     public double getEvaluation () {
         return this.evaluation;

@@ -103,6 +103,6 @@ public class Rook extends Piece{
         // points for the piece being on its most effective square
         eval += minmax*idealSquares[pr][pc];
 
-        return this.value + eval;
+        return eval;
     }
 }
