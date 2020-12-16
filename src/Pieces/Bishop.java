@@ -3,6 +3,8 @@ package Pieces;
 import Board.BoardState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Bishop extends Piece {
 
@@ -44,7 +46,6 @@ public class Bishop extends Piece {
         int pc=this.col;
 
         for (int[] dir : directions) {
-            //Check Upward Right Diagonal
             for(int i=1; i<8;i++){
                 //Check if move is in bounds
                 if(!inBounds(pr + i*dir[0],pc + i*dir[1])) break;
@@ -116,6 +117,12 @@ public class Bishop extends Piece {
         if (bishopPair) {
             eval += minmax*2;
         }
+
+        if (!this.white) {
+            Collections.reverse(Arrays.asList(idealSquares));
+        }
+        // points for the piece being on its most effective square
+        eval += minmax*idealSquares[pr][pc];
 
         return this.value + eval;
     }

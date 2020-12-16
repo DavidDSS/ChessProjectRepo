@@ -9,7 +9,7 @@ import java.util.Collections;
 public class Pawn extends Piece {
 
     boolean isAttacking=false;
-    int value = this.white ? 75 : 75;
+    int value = this.white ? 50 : -50;
     int[][] idealSquares = {
             {0,  0,  0,  0,  0,  0,  0,  0},
             {50, 50, 50, 50, 50, 50, 50, 50},
@@ -184,28 +184,28 @@ public class Pawn extends Piece {
 
         // is this a central pawn or flank pawn
         if (pc == 3 || pc == 4) {
-            eval += minmax*2;
+            eval += minmax*10;
         }
         else if (pc == 0 || pc == 7) {
-            eval += minmax*1;
+            eval += minmax*5;
         }
 
         // is the pawn protecting another pawn/piece
         // left column
         if (inBounds(pr+dir, pc-1)) {
             if (board.theBoard[pr+dir][pc-1] != null && (this.white == board.theBoard[pr+dir][pc-1].white)) {
-                eval += minmax*1;
+                eval += minmax*5;
                 if (board.theBoard[pr+dir][pc-1].type == PieceType.PAWN) {
-                    eval += minmax*1;
+                    eval += minmax*10;
                 }
             }
         }
         // check right column
         if (inBounds(pr+dir, pc+1)){
             if (board.theBoard[pr+dir][pc+1] != null && (this.white == board.theBoard[pr+dir][pc+1].white)) {
-                eval += minmax*1;
+                eval += minmax*5;
                 if (board.theBoard[pr+dir][pc+1].type == PieceType.PAWN) {
-                    eval += minmax*1;
+                    eval += minmax*10;
                 }
             }
         }

@@ -20,7 +20,6 @@ public class BoardState {
     public boolean enPassant = false;
     public boolean checkmate = false;
     public boolean stalemate = false;
-    public boolean legalMove = true;
 
     public ArrayList<Piece> piecesAttackingKing = new ArrayList<>();
     public ArrayList<Piece> capturedPiecesWhite = new ArrayList<>();
@@ -44,8 +43,6 @@ public class BoardState {
             // deep copy of the board and pieces
             this.theBoard = b.theBoard.clone();
             this.theBoard = this.createDeepCopy(b.theBoard);
-            // i dont think we want to copy this
-            //this.attackedByPiece = b.attackedByPiece.clone();
 
         }
     } // copy constructor
@@ -83,9 +80,9 @@ public class BoardState {
         return copy;
     } // createDeepCopy
 
-    public void engineMove () {
+    public void engineMove (int d) {
 
-        Engine e = new Engine(this);
+        Engine e = new Engine(this, d);
         Piece move = e.calculateBestMove();
 
         // if no move returned
@@ -144,7 +141,6 @@ public class BoardState {
         // user chose empty square
         if(theBoard[startR][startC]==null){
             System.out.println("That is an illegal move!");
-            legalMove = false;
             return;
         }
 
@@ -220,7 +216,6 @@ public class BoardState {
             moves = legalMovesKingInCheck();
             if (moves.size() == 0) {
                 stalemate = true;
-                //System.out.println("Stalemate: 1/2 - 1/2");
             }
         }
     }
@@ -231,8 +226,6 @@ public class BoardState {
             ArrayList<Piece> moves = legalMovesKingInCheck();
             if (moves.size() == 0) {
                 checkmate = true;
-                //String winner = whiteToMove ? "Black" : "White";
-                //System.out.println(winner + " is victorious!");
             }
         }
     }
@@ -271,38 +264,41 @@ public class BoardState {
         if (attackingPiece.type == PieceType.ROOK || attackingPiece.type == PieceType.QUEEN) {
             if (attackingPiece.col == king.col) {
                 int inc = rowDistance > 0 ? -1 : 1;
-                for (int i = attackingPiece.row; i < king.row; i += inc) {
+                int kingDistance = Math.abs(attackingPiece.row - king.row);
+                for (int i = 1; i < kingDistance; i ++) {
                     if (attackingPiece.type == PieceType.ROOK) {
-                        lineOfAttack.add(new Rook(attackingPiece.white, i, attackingPiece.col, attackingPiece));
+                        lineOfAttack.add(new Rook(attackingPiece.white, attackingPiece.row+i*inc, attackingPiece.col, attackingPiece));
                     } else {
-                        lineOfAttack.add(new Queen(attackingPiece.white, i, attackingPiece.col, attackingPiece));
+                        lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row+i*inc, attackingPiece.col, attackingPiece));
                     }
                 }
             }
             else if (attackingPiece.row == king.row){
                 int inc = colDistance > 0 ? -1 : 1;
-                for (int i = attackingPiece.col; i < king.col; i += inc) {
+                int kingDistance = Math.abs(attackingPiece.row - king.row);
+                for (int i = 1; i < kingDistance; i ++) {
                     if (attackingPiece.type == PieceType.ROOK) {
-                        lineOfAttack.add(new Rook(attackingPiece.white, attackingPiece.row, i, attackingPiece));
+                        lineOfAttack.add(new Rook(attackingPiece.white, attackingPiece.row, attackingPiece.col+i*inc, attackingPiece));
                     } else {
-                        lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row, i, attackingPiece));
+                        lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row, attackingPiece.col+i*inc, attackingPiece));
                     }
                 }
             }
         }
         // if the attacking piece is a bishop or a queen
         if (attackingPiece.type == PieceType.BISHOP || attackingPiece.type == PieceType.QUEEN) {
-            int incRow = rowDistance > 0 ? -1 : 1;
-            int incCol = colDistance > 0 ? -1 : 1;
-            int kingDist = Math.abs(king.row-attackingPiece.row);
+            if (attackingPiece.col != king.col && attackingPiece.row != king.row) {
+                int incRow = rowDistance > 0 ? -1 : 1;
+                int incCol = colDistance > 0 ? -1 : 1;
+                int kingDist = Math.abs(king.row-attackingPiece.row);
 
-            // add squares between the piece and the king
-            // all my homies hate while loops
-            for (int i = 1; i < kingDist; i++) {
-                if (attackingPiece.type == PieceType.BISHOP) {
-                    lineOfAttack.add(new Bishop(attackingPiece.white, attackingPiece.row+i*incRow, attackingPiece.col+i*incCol, attackingPiece));
-                } else {
-                    lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row+i*incRow, attackingPiece.col+i*incCol, attackingPiece));
+                // add squares between the piece and the king
+                for (int i = 1; i < kingDist; i++) {
+                    if (attackingPiece.type == PieceType.BISHOP) {
+                        lineOfAttack.add(new Bishop(attackingPiece.white, attackingPiece.row+i*incRow, attackingPiece.col+i*incCol, attackingPiece));
+                    } else {
+                        lineOfAttack.add(new Queen(attackingPiece.white, attackingPiece.row+i*incRow, attackingPiece.col+i*incCol, attackingPiece));
+                    }
                 }
             }
         }
@@ -314,6 +310,7 @@ public class BoardState {
 
         ArrayList<Piece> lineOfAttack= getLineOfAttack();
         ArrayList<Piece> legalMoves= new ArrayList<>();
+        attackedByPiece= new boolean[8][8];
 
         //Checks all the possible attacks for the enemy pieces
         for(int r=0; r<8; r++){
@@ -332,6 +329,36 @@ public class BoardState {
                         else{
                             attackedByPiece[p.row][p.col]=true;
                         }
+                    }
+                }
+            }
+        }
+
+        // for the attacking piece just add all theoretical attack moves
+        for (Piece p : piecesAttackingKing) {
+            if (p.type == PieceType.QUEEN || p.type == PieceType.ROOK) {
+                // check off every square on the column
+                for (int r=0; r < 8; r++) {
+                    attackedByPiece[r][p.col] = true;
+                }
+                // check off every square on the row
+                for (int c=0; c < 8; c++) {
+                    attackedByPiece[p.row][c] = true;
+                }
+            }
+            if (p.type == PieceType.QUEEN || p.type == PieceType.BISHOP) {
+                // check off every square on one diagonal
+                int[][] directions = {
+                        {1, 1},
+                        {-1, 1},
+                        {1, -1},
+                        {-1, -1},
+                };
+                for (int[] dir : directions) {
+                    for(int i=1; i<8;i++){
+                        //Check if move is in bounds
+                        if(p.row + i*dir[0]<0 || p.col + i*dir[1]<0 || p.row + i*dir[0]>7 || p.col + i*dir[1]>7) break;
+                        attackedByPiece[p.row + i*dir[0]][p.col + i*dir[1]] = true;
                     }
                 }
             }

@@ -72,7 +72,7 @@ public class King extends Piece {
             }
         }
 
-        if(board.whiteToMove && this.white) {
+        if(board.whiteToMove == this.white) {
             // check if castling is possible for the white or black king
             boolean kingSideCastle = true;
             boolean queenSideCastle = true;
@@ -82,7 +82,10 @@ public class King extends Piece {
                 // check if a file rook has moved
                 if (i == 0) {
                     // if the rook is in initial position, but has moved, no castle
-                    if (board.theBoard[row][i] != null && board.theBoard[row][i].hasMoved) {
+                    if (board.theBoard[row][i] == null) {
+                        queenSideCastle = false;
+                    }
+                    else if (board.theBoard[row][i] != null && board.theBoard[row][i].hasMoved) {
                         queenSideCastle = false;
                     }
                 } else if (i >= 1 && i <= 3) {
@@ -105,7 +108,10 @@ public class King extends Piece {
                 // check if h file rook has moved
                 else if (i == 7) {
                     // if the rook is in initial position, but has moved, no castle
-                    if (board.theBoard[row][i] != null && board.theBoard[row][i].hasMoved) {
+                    if (board.theBoard[row][i] == null) {
+                        kingSideCastle = false;
+                    }
+                    else if (board.theBoard[row][i] != null && board.theBoard[row][i].hasMoved) {
                         kingSideCastle = false;
                     }
                 }
@@ -139,7 +145,6 @@ public class King extends Piece {
         if (this.moves!= null && this.moves.size() > 0) {
             eval += minmax*this.moves.size();
         }
-
 
         if (!this.white) {
             Collections.reverse(Arrays.asList(idealSquares));

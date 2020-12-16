@@ -38,9 +38,12 @@ public class PlayChess {
 
         BoardState board;
 
-        Scanner gameMode= new Scanner(System.in);
+        Scanner userInput = new Scanner(System.in);
         System.out.println("Press 0 to use Classic Board \nPress 1 to use Custom Board (Testing)");
-        int choice= gameMode.nextInt();
+        int choice= userInput.nextInt();
+
+        System.out.println("Please set a depth for the engine search");
+        int depth = userInput.nextInt();
 
         //User chose to use classic board
         if(choice==0) {
@@ -51,17 +54,15 @@ public class PlayChess {
         //User chose to use custom board
         else{
             board= new BoardState(null);
-
-            Scanner pieceLocation= new Scanner(System.in);
             System.out.print("Select the board position the WHITE king should be placed: ");
-            String piecePosW= pieceLocation.nextLine();
+            String piecePosW= userInput.nextLine();
             char[] inputW = new char[2];
             inputW[0]=piecePosW.charAt(0);
             inputW[1]=piecePosW.charAt(1);
             board.setPiece(true, 'k',convertNotation(inputW)[0],convertNotation(inputW)[1]);
 
             System.out.print("Select the board position the BLACK king should be placed: ");
-            String piecePosB= pieceLocation.nextLine();
+            String piecePosB= userInput.nextLine();
             char[] inputB = new char[2];
             inputB[0]=piecePosB.charAt(0);
             inputB[1]=piecePosB.charAt(1);
@@ -108,7 +109,7 @@ public class PlayChess {
 
 
                     System.out.print("Select the board position of your piece: ");
-                    String piecePos = pieceLocation.nextLine();
+                    String piecePos = userInput.nextLine();
 
                     char[] inputP = new char[2];
                     inputP[0] = piecePos.charAt(0);
@@ -123,16 +124,16 @@ public class PlayChess {
 
         }
 
-        while(!board.checkmate || !board.stalemate){
+        while(!board.checkmate && !board.stalemate){
             // take user input for move
             Scanner playerMove= new Scanner(System.in);
-            System.out.print("Position of piece you want to move: ");
+            System.out.print("Algebraic coordinates of piece you want to move i.e d2: ");
             String move= playerMove.nextLine();
             char[] input = new char[2];
             input[0]=move.charAt(0);
             input[1]=move.charAt(1);
 
-            System.out.print("End Position of the piece: ");
+            System.out.print("Algebraic coordinates of where to move the piece i.e d4: ");
             String moveEnd= playerMove.nextLine();
             System.out.println();
             char[] inputEnd = new char[2];
@@ -145,6 +146,7 @@ public class PlayChess {
 
             // check for valid move input by the user
             if (theMove[0] == -9999 || theMove[1] == -9999 || endMove[0] == -9999 || endMove[1] == -9999) {
+                System.out.println("That is not a legal move!");
                 continue;
             }
             else {
@@ -152,22 +154,22 @@ public class PlayChess {
                 board.userMove(theMove[0], theMove[1], endMove[0], endMove[1]);
                 // print the board
                 board.printBoard();
-                // check if move went through
-                if (board.legalMove) {
+
+                // AI move
+                if (!board.whiteToMove) {
+                    System.out.println("Calculating...");
+                    // break out of loop if game over
+                    if (board.checkmate || board.stalemate) break;
                     // let the engine make a move
-                    board.engineMove();
+                    board.engineMove(depth);
                     // print the board
                     board.printBoard();
                 }
-                // reset flag on illegal move
-                else {
-                    board.legalMove = true;
-                }
             }
-
-
         }
 
         System.out.println("Game over!");
+        if (board.checkmate) System.out.println("Checkmate");
+        if (board.stalemate) System.out.println("Stalemate");
     }
 }
