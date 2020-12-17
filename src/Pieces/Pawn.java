@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- Jason Grightmire (5388327)
- David Saldana Suarez (6155964)
+ Jason Grightmire jg12jg (5388327)
+ David Saldana Suarez ds16vx (6155964)
  COSC 3P71
  Chess Project
  */
@@ -16,6 +16,7 @@ import java.util.Collections;
 public class Pawn extends Piece {
 
     boolean isAttacking=false;
+    int promotionChoice=0;
     int value = this.white ? 50 : -50;
     int[][] idealSquares = {
             {0,  0,  0,  0,  0,  0,  0,  0},

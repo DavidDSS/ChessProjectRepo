@@ -9,8 +9,8 @@ import java.util.Comparator;
 import java.util.Date;
 
 /**
- Jason Grightmire (5388327)
- David Saldana Suarez (6155964)
+ Jason Grightmire jg12jg (5388327)
+ David Saldana Suarez ds16vx (6155964)
  COSC 3P71
  Chess Project
  */

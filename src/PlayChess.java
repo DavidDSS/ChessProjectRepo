@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- Jason Grightmire (5388327)
- David Saldana Suarez (6155964)
+ Jason Grightmire jg12jg (5388327)
+ David Saldana Suarez ds16vx (6155964)
  COSC 3P71
  Chess Project
  */
@@ -182,16 +182,18 @@ public class PlayChess {
             System.out.print("Algebraic coordinates of piece you want to move i.e d2: ");
             String move= playerMove.nextLine();
             char[] input = new char[2];
-            input[0]=move.charAt(0);
-            input[1]=move.charAt(1);
-
+            if(move.length()==2) {
+                input[0] = move.charAt(0);
+                input[1] = move.charAt(1);
+            }
             System.out.print("Algebraic coordinates of where to move the piece i.e d4: ");
             String moveEnd= playerMove.nextLine();
             System.out.println();
             char[] inputEnd = new char[2];
-            inputEnd[0]=moveEnd.charAt(0);
-            inputEnd[1]=moveEnd.charAt(1);
-
+            if(moveEnd.length()==2) {
+                inputEnd[0] = moveEnd.charAt(0);
+                inputEnd[1] = moveEnd.charAt(1);
+            }
             // convert the algebraic notation into array notation for our silicon friend
             int[] theMove = convertNotation(input);
             int[] endMove = convertNotation(inputEnd);

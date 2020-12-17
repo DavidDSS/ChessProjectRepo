@@ -5,6 +5,7 @@ import Pieces.*;
 
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  Jason Grightmire (5388327)
@@ -21,6 +22,7 @@ public class BoardState {
     public double evaluation = 0;
     public int enPassantRow = 0;
     public int enPassantCol = 0;
+    public int promoteChoice = -999;
 
     public boolean whiteToMove = true;
     public boolean kingInCheck = false;
@@ -41,6 +43,7 @@ public class BoardState {
             this.enPassant = b.enPassant;
             this.enPassantRow = b.enPassantRow;
             this.enPassantCol = b.enPassantCol;
+            this.promoteChoice = b.promoteChoice;
             this.checkmate = b.checkmate;
             this.stalemate = b.stalemate;
             this.piecesAttackingKing = b.piecesAttackingKing;
@@ -172,6 +175,19 @@ public class BoardState {
 
         // if the user move is legal, actually make the move
         if(legalMove) {
+            if(theBoard[startR][startC].type==PieceType.PAWN){
+                if(endR==0){
+                    System.out.println("Please choose what the pawn should promote to:");
+                    System.out.println("Enter 0 for Queen");
+                    System.out.println("Enter 1 for Rook");
+                    System.out.println("Enter 2 for Knight");
+                    System.out.println("Enter 3 for Bishop");
+
+                    Scanner promoteInput = new Scanner(System.in);
+                    promoteChoice= promoteInput.nextInt();
+
+                }
+            }
             makeMove(startR, startC, endR, endC);
         }
         else{
@@ -494,7 +510,12 @@ public class BoardState {
                 // promote the pawn at the end of the board
                 if (endR==0 && whiteToMove) {
                     Pawn pawn = (Pawn) thePiece;
-                    thePiece = pawn.promote(whiteToMove, endR, endC, 0);
+                    if(promoteChoice!=-999){
+                        thePiece = pawn.promote(whiteToMove, endR, endC, promoteChoice);
+                    }
+                    else{
+                        thePiece = pawn.promote(whiteToMove, endR, endC, 0);
+                    }
                 }
                 else if (endR==7 && !whiteToMove) {
                     Pawn pawn = (Pawn) thePiece;
