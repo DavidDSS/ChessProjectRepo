@@ -6,6 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ Jason Grightmire (5388327)
+ David Saldana Suarez (6155964)
+ COSC 3P71
+ Chess Project
+ */
+
 public class King extends Piece {
 
     boolean[][] attackedByPiece = new boolean[8][8];

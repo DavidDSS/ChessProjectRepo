@@ -8,6 +8,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
+/**
+ Jason Grightmire (5388327)
+ David Saldana Suarez (6155964)
+ COSC 3P71
+ Chess Project
+ */
+
 public class Engine {
 
     int depth;

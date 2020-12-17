@@ -46,11 +46,30 @@ public class PlayChess {
         BoardState board;
 
         Scanner userInput = new Scanner(System.in);
-        System.out.println("Press 0 to use Classic Board \nPress 1 to use Custom Board (Testing)");
-        int choice= userInput.nextInt();
 
-        System.out.println("Please set a depth for the engine search (3-5 recommended): ");
-        int depth = userInput.nextInt();
+        int choice;
+        do {
+            System.out.println("Press 0 to use Classic Board \nPress 1 to use Custom Board (Testing)");
+            while (!userInput.hasNextInt()) {
+                System.out.println("Not a Valid Input");
+                System.out.println("Press 0 to use Classic Board \nPress 1 to use Custom Board (Testing)");
+                userInput.next();
+            }
+            choice= userInput.nextInt();
+        } while (choice != 0 && choice !=1);
+
+
+        int depth;
+
+        do {
+            System.out.println("Please set a depth for the engine search (3-5 recommended): ");
+            while (!userInput.hasNextInt()) {
+                System.out.println("Not a Valid Input");
+                System.out.println("Please set a depth for the engine search (3-5 recommended): ");
+                userInput.next();
+            }
+            depth = userInput.nextInt();
+        } while (depth<=0);
 
         //User chose to use classic board
         if(choice==0) {
@@ -60,39 +79,62 @@ public class PlayChess {
         }
         //User chose to use custom board
         else{
-            board= new BoardState(null);
-            System.out.print("Select the board position the WHITE king should be placed: ");
-            String piecePosW= userInput.nextLine();
-            char[] inputW = new char[2];
-            inputW[0]=piecePosW.charAt(0);
-            inputW[1]=piecePosW.charAt(1);
+            Scanner customBoardInput = new Scanner(System.in);
+            char[] inputW;
+            do {
+                board = new BoardState(null);
+                System.out.print("Select the board position the WHITE king should be placed: ");
+                String piecePosW = customBoardInput.nextLine();
+                inputW= new char[2];
+                inputW[0] = piecePosW.charAt(0);
+                inputW[1] = piecePosW.charAt(1);
+            } while(convertNotation(inputW)[0]==-9999 || convertNotation(inputW)[1]==-9999);
             board.setPiece(true, 'k',convertNotation(inputW)[0],convertNotation(inputW)[1]);
 
-            System.out.print("Select the board position the BLACK king should be placed: ");
-            String piecePosB= userInput.nextLine();
-            char[] inputB = new char[2];
-            inputB[0]=piecePosB.charAt(0);
-            inputB[1]=piecePosB.charAt(1);
+            char[] inputB;
+            do {
+                System.out.print("Select the board position the BLACK king should be placed: ");
+                String piecePosB= customBoardInput.nextLine();
+                inputB = new char[2];
+                inputB[0]=piecePosB.charAt(0);
+                inputB[1]=piecePosB.charAt(1);
+            } while(convertNotation(inputB)[0]==-9999 || convertNotation(inputB)[1]==-9999);
             board.setPiece(false, 'K',convertNotation(inputB)[0],convertNotation(inputB)[1]);
 
             int pieceChoice;
 
+            Scanner newPiece= new Scanner(System.in);
             do{
-                System.out.println("Select the piece you want to add next");
-                System.out.println("Press 0 for Pawn");
-                System.out.println("Press 1 for Rook");
-                System.out.println("Press 2 for Knight");
-                System.out.println("Press 3 for Bishop");
-                System.out.println("Press 4 for Queen");
-                System.out.println("Press 5 to Stop Adding Pieces and PLAY");
+                do {
+                    System.out.println("Select the piece you want to add next:");
+                    System.out.println("Press 0 for Pawn");
+                    System.out.println("Press 1 for Rook");
+                    System.out.println("Press 2 for Knight");
+                    System.out.println("Press 3 for Bishop");
+                    System.out.println("Press 4 for Queen");
+                    System.out.println("Press 5 to Stop Adding Pieces and PLAY");
+                    while (!newPiece.hasNextInt()) {
+                        System.out.println("Not a Valid Input!\nEnter a number from 0 to 5");
+                        newPiece.next();
+                    }
+                    pieceChoice= newPiece.nextInt();
+                    if(pieceChoice>5) System.out.println("Not a Valid Input!\nEnter a number from 0 to 5");
+                } while (pieceChoice>5 || pieceChoice<0);
 
-                Scanner newPiece= new Scanner(System.in);
-                pieceChoice=newPiece.nextInt();
 
                 if(pieceChoice!=5) {
-                    System.out.println("What Color is the Piece \nPress 0 for White \nPress 1 for Black");
+                    int pieceColor;
+                    do {
+                        System.out.println("What Color is the Piece \nPress 0 for White \nPress 1 for Black");
+                        while (!newPiece.hasNextInt()) {
+                            System.out.println("Not a Valid Input!\nEnter 0 for White or 1 for Black\n");
+                            newPiece.next();
+                        }
+                        pieceColor= newPiece.nextInt();
+                        if(pieceColor<0 || pieceColor>1) System.out.println("Not a Valid Input!\nEnter 0 for White or 1 for Black\n");
+                    } while (pieceColor>1 || pieceColor<0);
 
-                    int pieceColor = newPiece.nextInt();
+
                     boolean colorChoice = pieceColor == 0 ? true : false;
 
                     char pLetter = 'p';
@@ -115,13 +157,16 @@ public class PlayChess {
                     }
 
 
-                    System.out.print("Select the board position of your piece: ");
-                    String piecePos = userInput.nextLine();
-
-                    char[] inputP = new char[2];
-                    inputP[0] = piecePos.charAt(0);
-                    inputP[1] = piecePos.charAt(1);
+                    char[] inputP;
+                    do {
+                        System.out.print("Select the board position the piece should be placed: ");
+                        String piecePos = customBoardInput.nextLine();
+                        inputP = new char[2];
+                        inputP[0] = piecePos.charAt(0);
+                        inputP[1] = piecePos.charAt(1);
+                    } while(convertNotation(inputP)[0]==-9999 || convertNotation(inputP)[1]==-9999);
                     board.setPiece(colorChoice, pLetter, convertNotation(inputP)[0], convertNotation(inputP)[1]);
+
                 }
 
             }
