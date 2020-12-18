@@ -84,4 +84,9 @@ public class Queen extends Piece {
 
         return eval;
     }
+
+    @Override
+    public int getPieceValue () {
+        return this.value;
+    }
 }

@@ -102,6 +102,9 @@ public class BoardState {
         }
         else {
             System.out.println("AI Move: "+convertAImove(move.prevRow, move.prevCol)+" -> "+convertAImove(move.row, move.col));
+            if (getLineOfAttack()!=null) {
+                System.out.println(getLineOfAttack().size());
+            }
             makeMove(move.prevRow, move.prevCol, move.row, move.col);
         }
     }
@@ -116,7 +119,7 @@ public class BoardState {
             for (int c = 0; c < 8; c++) {
                 if(theBoard[r][c]!=null) {
                     // get the evaluation of the piece and add it to the total
-                    pieceEval += theBoard[r][c].value;
+                    pieceEval += theBoard[r][c].getPieceValue();
                     activityEval += theBoard[r][c].evaluatePiece(this);
                 }
             }
@@ -555,21 +558,28 @@ public class BoardState {
             ArrayList<Piece> moves = theBoard[endR][endC].getMoves(this);
             // check if the piece we moved has put the king in check
             for(Piece p : moves){
+                // opposite colour king
                 if(theBoard[p.row][p.col]!=null && theBoard[p.row][p.col].type==PieceType.KING){
-                    kingInCheck=true;
-                    piecesAttackingKing.add(theBoard[endR][endC]);
+                    if (theBoard[p.row][p.col].white != p.white) {
+                        kingInCheck = true;
+                        piecesAttackingKing.add(theBoard[endR][endC]);
+                    }
+
                 }
             }
             // check for a double check, other pieces attacking the king
             for (int r=0; r<8; r++) {
                 for (int c=0; c<8; c++) {
                     // not the same piece
-                    if(theBoard[r][c]!=null && theBoard[r][c].white==whiteToMove && r!=endR && c!=endC && r!=startR && c!=startC) {
+                    if(theBoard[r][c]!=null && theBoard[r][c].white==whiteToMove && !(r==endR && c==endC)) {
                         moves = theBoard[r][c].getMoves(this);
                         for (Piece p : moves) {
+                            // opposite colour king
                             if (theBoard[p.row][p.col]!=null && theBoard[p.row][p.col].type==PieceType.KING) {
-                                kingInCheck = true;
-                                piecesAttackingKing.add(p);
+                                if (theBoard[p.row][p.col].white != p.white) {
+                                    kingInCheck = true;
+                                    piecesAttackingKing.add(p);
+                                }
                             }
                         }
                     }

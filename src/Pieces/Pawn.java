@@ -16,7 +16,6 @@ import java.util.Collections;
 public class Pawn extends Piece {
 
     boolean isAttacking=false;
-    int promotionChoice=0;
     int value = this.white ? 50 : -50;
     int[][] idealSquares = {
             {0,  0,  0,  0,  0,  0,  0,  0},
@@ -218,6 +217,11 @@ public class Pawn extends Piece {
 
     public boolean getAttacking(){
         return isAttacking;
+    }
+
+    @Override
+    public int getPieceValue () {
+        return this.value;
     }
 
 }

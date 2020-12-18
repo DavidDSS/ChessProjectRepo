@@ -63,7 +63,10 @@ public abstract class Piece {
         this.evaluation = p.evaluation;
         this.value = p.value;
     }
+
     public double getEvaluation () {
         return this.evaluation;
     }
+
+    public abstract int getPieceValue();
 }

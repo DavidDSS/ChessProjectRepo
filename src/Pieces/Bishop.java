@@ -133,4 +133,9 @@ public class Bishop extends Piece {
 
         return eval;
     }
+
+    @Override
+    public int getPieceValue () {
+        return this.value;
+    }
 }

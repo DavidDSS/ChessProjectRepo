@@ -62,10 +62,10 @@ public class PlayChess {
         int depth;
 
         do {
-            System.out.println("Please set a depth for the engine search (3-5 recommended): ");
+            System.out.println("Please set a depth for the engine search (2-3 recommended): ");
             while (!userInput.hasNextInt()) {
                 System.out.println("Not a Valid Input");
-                System.out.println("Please set a depth for the engine search (3-5 recommended): ");
+                System.out.println("Please set a depth for the engine search (2-3 recommended): ");
                 userInput.next();
             }
             depth = userInput.nextInt();

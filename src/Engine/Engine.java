@@ -65,14 +65,6 @@ public class Engine {
 
         // sort moves by evaluation (min to max)
         moves.sort(Comparator.comparingDouble(Piece::getEvaluation));
-        // sort them max to min for white
-        if (position.whiteToMove) {
-            Collections.reverse(moves);
-        }
-        // for efficiency only consider top 5 moves
-        if (moves.size() >= 5) {
-            moves = new ArrayList<>(moves.subList(0, 5));
-        }
 
         // some default move
         bestMove = moves.get(0);
@@ -101,8 +93,8 @@ public class Engine {
                     bestMove = m;
                 }
             }
-            // set a search time limit, 10 seconds
-            if (date.getTime() - startTime > 10000) {
+            // set a search time limit, 20 seconds
+            if (date.getTime() - startTime > 20000) {
                 break;
             }
         }
@@ -138,10 +130,6 @@ public class Engine {
         // sort them max to min for white
         if (position.whiteToMove) {
             Collections.reverse(moves);
-        }
-        // for efficiency only consider top 10 moves
-        if (moves.size() >= 10) {
-            moves = new ArrayList<>(moves.subList(0, 10));
         }
 
         double eval;
